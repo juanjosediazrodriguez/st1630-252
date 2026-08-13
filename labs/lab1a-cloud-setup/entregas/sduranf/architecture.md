@@ -1,7 +1,7 @@
 # Arquitectura — Lab 1a
 
 **Curso:** ST1630-2026-2 · **Semana:** S4-S5 · **Fecha de entrega:** 2026-08-13
-**Estudiante:** _(tu nombre completo)_ — sduranf@eafit.edu.co
+**Estudiante:** Sebastián Durán Fernández — sduranf@eafit.edu.co
 
 ## 1. Diagrama de la arquitectura
 
