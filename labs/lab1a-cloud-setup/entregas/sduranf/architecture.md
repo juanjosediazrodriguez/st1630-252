@@ -196,15 +196,18 @@ agente de IA y qué terminaste decidiendo por tu cuenta?
 
 ## 7. Bitácora de delegación
 
-| Tarea | ¿Delegado a agente? | Justificación |
+> **Herramienta utilizada en todas las tareas delegadas de este lab:**
+> Claude Code (Opus 5).
+
+| Tarea | ¿Delegado? | Justificación |
 |---|---|---|
-| Instalación de AWS CLI v2 y setup del entorno local | Sí — Claude Code (Opus 5) | Configuración de herramientas, sin valor de aprendizaje del curso. |
-| Edición de variables (`ESTUDIANTE`, `KEY_NAME`, `SUBNET_ID`) en los scripts | Sí — Claude Code | El boilerplate ya venía resuelto en el repo; el lab autoriza expresamente delegar estos ajustes. |
-| Ejecución de `setup_s3.sh` y `create_emr.sh` | Sí — Claude Code | Ejecución mecánica de scripts provistos, verificada contra la salida esperada del README. |
-| Troubleshooting (rutas MSYS en `file://`, choque `--use-default-roles` vs `InstanceProfile`, apertura del puerto 22) | Sí — Claude Code | El lab clasifica el troubleshooting de AWS CLI/EMR como delegable: memorizar mensajes de error de la CLI tiene bajo valor de aprendizaje. |
-| Diagnóstico de permisos IAM del sandbox (`simulate-principal-policy`) | Sí — Claude Code | Es diagnóstico técnico, no diseño: sirvió para saber qué permitía el entorno, no para decidir qué permisos eran correctos. |
-| Ejecución del notebook en el clúster y conversión de la captura del DAG a PNG | Sí — Claude Code | Operaciones mecánicas sobre evidencia propia; los resultados son de mi ejecución real (`application_1786654608050_0001`). |
-| **Elaboración de las justificaciones** de este documento y del análisis del notebook | **Parcial** — Claude Code (Opus 5) | Las decisiones, posturas y criterios son míos; el agente los convirtió en prosa a partir de mis respuestas. El contenido no es del agente, la redacción sí. |
+| Instalación de AWS CLI v2 y setup del entorno local | Sí | Configuración de herramientas, sin valor de aprendizaje del curso. |
+| Edición de variables (`ESTUDIANTE`, `KEY_NAME`, `SUBNET_ID`) en los scripts | Sí | El boilerplate ya venía resuelto en el repo; el lab autoriza expresamente delegar estos ajustes. |
+| Ejecución de `setup_s3.sh` y `create_emr.sh` | Sí | Ejecución mecánica de scripts provistos, verificada contra la salida esperada del README. |
+| Troubleshooting (rutas MSYS en `file://`, choque `--use-default-roles` vs `InstanceProfile`, apertura del puerto 22) | Sí | El lab clasifica el troubleshooting de AWS CLI/EMR como delegable: memorizar mensajes de error de la CLI tiene bajo valor de aprendizaje. |
+| Diagnóstico de permisos IAM del sandbox (`simulate-principal-policy`) | Sí | Es diagnóstico técnico, no diseño: sirvió para saber qué permitía el entorno, no para decidir qué permisos eran correctos. |
+| Ejecución del notebook en el clúster y conversión de la captura del DAG a PNG | Sí | Operaciones mecánicas sobre evidencia propia; los resultados son de mi ejecución real (`application_1786654608050_0001`). |
+| **Elaboración de las justificaciones** de este documento y del análisis del notebook | **Parcial** | Las decisiones, posturas y criterios son míos; el agente los convirtió en prosa a partir de mis respuestas. El contenido no es del agente, la redacción sí. |
 | Decisión de qué permisos IAM otorgar | No — indicación del profesor | Ante el bloqueo del sandbox, consulté al profesor y él indicó usar el rol preexistente. |
 | Diseño de la estructura de prefijos Bronze/Silver/Gold y del particionamiento | No | Decisión de arquitectura evaluada en este documento. |
 | Interpretación del benchmark Spark y del DAG | No | Es evidencia empírica de mi propia ejecución; el agente aportó los datos medidos, la lectura es mía. |
