@@ -7,26 +7,34 @@
 
 ```mermaid
 flowchart TB
-    subgraph AWS["Cuenta AWS Academy 555490553439 · us-east-1"]
-        subgraph S3["S3 · s3://st1630-sduranf-2026"]
-            B["bronze/<br/>(crudo)<br/>ventas/prueba_parquet.parquet 185 KiB<br/>ventas/prueba_csv.csv 798 KiB"]
-            S["silver/<br/>(limpio)<br/>— vacío, Lab 1b —"]
-            G["gold/<br/>(agregado)<br/>— vacío, Lab 1b —"]
-            L["logs/ · bootstrap/<br/>(operación del clúster)"]
+    subgraph AWS["Cuenta AWS Academy 555490553439 - region us-east-1"]
+        subgraph S3["S3 - bucket st1630-sduranf-2026"]
+            B["bronze/ (crudo)"]
+            BV["ventas/prueba_parquet.parquet - 185 KiB"]
+            BC["ventas/prueba_csv.csv - 798 KiB"]
+            S["silver/ (limpio) - vacio hasta Lab 1b"]
+            G["gold/ (agregado) - vacio hasta Lab 1b"]
+            L["logs/ y bootstrap/ - operacion del cluster"]
         end
 
-        IAM["Instance profile: EMR_EC2_DefaultRole<br/>política AmazonElasticMapReduceforEC2Role<br/>(preexistente — el sandbox deniega iam:CreateRole)"]
+        IAM["Instance profile EMR_EC2_DefaultRole"]
+        POL["Politica AmazonElasticMapReduceforEC2Role"]
+        NOTA["Preexistente: el sandbox deniega iam:CreateRole"]
 
-        subgraph EMR["Clúster EMR j-1ZDUFFV7I93JN · emr-6.15.0"]
-            M["Master m5.xlarge<br/>Spark + Hadoop"]
-            C["Core m5.xlarge<br/>Spark executor"]
+        subgraph EMR["Cluster EMR j-1ZDUFFV7I93JN - emr-6.15.0"]
+            M["Master m5.xlarge - Spark y Hadoop"]
+            C["Core m5.xlarge - Spark executor"]
         end
     end
 
-    M <-->|"Spark"| C
-    EMR -->|"asume"| IAM
-    IAM -->|"GetObject / PutObject<br/>DeleteObject / ListBucket"| S3
-    B -.->|"spark.read.parquet()"| M
+    B --> BV
+    B --> BC
+    M <-->|Spark| C
+    EMR -->|asume| IAM
+    IAM --> POL
+    IAM --- NOTA
+    POL -->|GetObject PutObject DeleteObject ListBucket| S3
+    BV -.->|spark.read.parquet| M
 ```
 
 ## 2. Decisiones de S3
