@@ -9,7 +9,12 @@ credentials
 __pycache__/
 *.pyc
 .venv/
+.venv-python/
+.venv-cache/
+.venv-linux/
+.lab2b/
 venv/
+hadoop/
 
 # Notebooks
 .ipynb_checkpoints/
@@ -28,3 +33,13 @@ data/local/
 labs/lab1b-batch/datos/data_quality_report.md
 labs/lab1b-batch/ejemplos/
 labs/lab2a-kafka/ejemplos/
+labs/lab2b-kinesis/ejemplos/
+
+# Herramientas privadas del profesor -- metodología de calificación y
+# las revisiones/notas que produce sobre entregas de estudiantes reales
+.claude/skills/calificar-labs/
+calificaciones/
+
+# Lab 4a -- logs que genera Airflow localmente (no son código, se
+# regeneran cada vez que se corre el DAG)
+labs/lab4a-pipelines/logs/
