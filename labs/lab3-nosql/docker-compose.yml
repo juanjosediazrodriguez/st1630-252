@@ -1,0 +1,80 @@
+# docker-compose.yml — Lab 3 (ST1630-2026-2)
+#
+# Levanta los 4 motores NoSQL del lab, uno por modelo de datos, más un
+# contenedor "app" con Python 3.11 y los drivers ya instalados. Todos los
+# scripts del lab se corren DENTRO de app, así no dependes de la versión
+# de Python de tu máquina (el driver de Cassandra no funciona en 3.12+).
+#
+#   MongoDB    documento       localhost:27017
+#   Cassandra  columnar ancho  localhost:9042
+#   Redis      clave-valor     localhost:6379
+#   Neo4j      grafo           http://localhost:7474 (UI) · bolt://localhost:7687
+#
+# Uso:
+#   docker compose up -d --build     # la primera vez tarda (Cassandra ~1-2 min en estar lista)
+#   docker compose ps                # espera a que los 4 motores digan "healthy"
+#   docker compose exec app bash     # entras al contenedor de trabajo
+#
+# Memoria: los 4 motores juntos usan ~3 GB. Asigna al menos 4 GB a Docker.
+
+services:
+  mongo:
+    image: mongo:7.0
+    ports: ["27017:27017"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      retries: 20
+
+  cassandra:
+    image: cassandra:4.1
+    ports: ["9042:9042"]
+    environment:
+      MAX_HEAP_SIZE: 512M
+      HEAP_NEWSIZE: 128M
+      CASSANDRA_CLUSTER_NAME: lab3
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe keyspaces' > /dev/null 2>&1"]
+      interval: 10s
+      retries: 30
+      start_period: 40s
+
+  redis:
+    image: redis:7.2-alpine
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 20
+
+  neo4j:
+    image: neo4j:5.23-community
+    ports: ["7474:7474", "7687:7687"]
+    environment:
+      NEO4J_AUTH: neo4j/lab3-st1630
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache_size: 256m
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p lab3-st1630 'RETURN 1' > /dev/null 2>&1"]
+      interval: 10s
+      retries: 30
+      start_period: 20s
+
+  app:
+    build: .
+    working_dir: /lab
+    volumes:
+      - .:/lab
+    environment:
+      MONGO_URI: mongodb://mongo:27017
+      CASSANDRA_HOST: cassandra
+      REDIS_HOST: redis
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_PASSWORD: lab3-st1630
+    command: sleep infinity
+    depends_on:
+      mongo: {condition: service_healthy}
+      cassandra: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      neo4j: {condition: service_healthy}

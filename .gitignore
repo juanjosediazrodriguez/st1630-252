@@ -34,6 +34,7 @@ labs/lab1b-batch/datos/data_quality_report.md
 labs/lab1b-batch/ejemplos/
 labs/lab2a-kafka/ejemplos/
 labs/lab2b-kinesis/ejemplos/
+labs/lab3-nosql/ejemplos/
 
 # Herramientas privadas del profesor -- metodología de calificación y
 # las revisiones/notas que produce sobre entregas de estudiantes reales
@@ -43,3 +44,7 @@ calificaciones/
 # Lab 4a -- logs que genera Airflow localmente (no son código, se
 # regeneran cada vez que se corre el DAG)
 labs/lab4a-pipelines/logs/
+
+# Lab 3 -- datasets personales que genera datos/gen_dataset.py (uno por
+# estudiante, se regeneran con el mismo usuario)
+labs/lab3-nosql/datos/*/

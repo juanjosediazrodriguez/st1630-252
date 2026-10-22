@@ -16,6 +16,9 @@
 | 3 | S10 | Modelos de datos y NoSQL |
 | 4 | S12 | DataOps / AIOps agéntico |
 
+**Supletorio de quices:** quien no haya presentado un quiz puede reemplazar esa nota con la
+del Lab 3 (opcional, individual). Ver `labs/lab3-nosql/README.md`.
+
 ## Laboratorios calificados
 
 | Lab | Semana | Tema |
@@ -24,7 +27,7 @@
 | 1b | S5 | Batch: S3, Glue, Athena, EMR, Spark |
 | 2a | S6 | Kafka |
 | 2b | S7 | Kinesis + Elastic Stack |
-| 3 | S10 | Comparativa de motores NoSQL |
+| 3 | S10 | Comparativa de motores NoSQL — **opcional e individual**: su nota es supletorio de quices (ver abajo) |
 | 4a | S11 | Pipelines y orquestación (Airflow) |
 | 4b | S12 | DataOps agéntico |
 | 5 | S13 | Servidor MCP sobre el datalake |
