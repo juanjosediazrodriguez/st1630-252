@@ -1,0 +1,22 @@
+{
+ "scenario": "rf09",
+ "t0": "2026-11-10T04:27:57.000Z",
+ "sent": 20,
+ "expected": {
+  "minute_start": "2026-11-10T04:28:00.000Z",
+  "orders": 20,
+  "value": 1600000.0,
+  "by_category": {
+   "3": {
+    "orders": 8,
+    "value": 400000.0
+   },
+   "1": {
+    "orders": 12,
+    "value": 1200000.0
+   }
+  },
+  "deadline": "2026-11-10T04:31:00.000Z",
+  "max_latency_s": 120
+ }
+}

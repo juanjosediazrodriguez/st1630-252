@@ -1,0 +1,23 @@
+{
+  "dashboard_id": 1,
+  "charts": {
+    "Ventas y ticket promedio": {
+      "id": 1,
+      "rows": 1
+    },
+    "Ventas por minuto": {
+      "id": 2,
+      "rows": 21
+    },
+    "Embudo de conversión": {
+      "id": 3,
+      "rows": 2
+    },
+    "Ventas por categoría": {
+      "id": 4,
+      "rows": 3
+    }
+  },
+  "ok": true,
+  "checked_at": "2026-11-10T04:39:41.319312+00:00"
+}

@@ -1,0 +1,32 @@
+{
+ "scenario": "rf08",
+ "t0": "2026-11-10T04:05:42.777Z",
+ "sent": 249,
+ "expected": {
+  "present": {
+   "U-TEST-A": {
+    "user_id": "U-TEST-A",
+    "value": 600000.0,
+    "last_event_ts": "2026-11-10T04:05:52.777Z",
+    "earliest": "2026-11-10T04:35:52.777Z",
+    "deadline": "2026-11-10T04:40:52.777Z"
+   }
+  },
+  "absent": {
+   "U-TEST-B": {
+    "user_id": "U-TEST-B",
+    "value": 600000.0,
+    "last_event_ts": "2026-11-10T04:25:42.777Z"
+   },
+   "U-TEST-C": {
+    "user_id": "U-TEST-C",
+    "value": 300000.0,
+    "last_event_ts": "2026-11-10T04:05:52.777Z"
+   }
+  },
+  "window_min": [
+   30,
+   35
+  ]
+ }
+}

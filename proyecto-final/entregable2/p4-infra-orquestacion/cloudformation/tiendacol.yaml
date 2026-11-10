@@ -13,11 +13,20 @@ Parameters:
     Type: Number
     Default: 25
     MinValue: 1
+  StreamShardCount:
+    Type: Number
+    Default: 1
+    MinValue: 1
+    MaxValue: 6
   EnableApplications:
     Type: String
     Default: 'false'
     AllowedValues: ['true', 'false']
   EnableAirflow:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+  EnableSuperset:
     Type: String
     Default: 'false'
     AllowedValues: ['true', 'false']
@@ -30,6 +39,7 @@ Parameters:
 Conditions:
   Applications: !Equals [!Ref EnableApplications, 'true']
   Airflow: !Equals [!Ref EnableAirflow, 'true']
+  Superset: !And [!Equals [!Ref EnableAirflow, 'true'], !Equals [!Ref EnableSuperset, 'true']]
 Resources:
   LakeBucket:
     Type: AWS::S3::Bucket
@@ -73,7 +83,7 @@ Resources:
     Type: AWS::Kinesis::Stream
     Properties:
       Name: !Sub '${Prefix}-events'
-      ShardCount: 1
+      ShardCount: !Ref StreamShardCount
       RetentionPeriodHours: 24
       StreamEncryption: {EncryptionType: KMS, KeyId: alias/aws/kinesis}
   AlertsDlq:
@@ -108,6 +118,20 @@ Resources:
     Type: AWS::SNS::Topic
     Properties:
       TopicName: !Sub '${Prefix}-alertas'
+  GlueFailureTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics: [!Ref AlertsTopic]
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowEventBridgeGlueFailures
+            Effect: Allow
+            Principal: {Service: events.amazonaws.com}
+            Action: sns:Publish
+            Resource: !Ref AlertsTopic
+            Condition:
+              StringEquals: {'aws:SourceAccount': !Ref 'AWS::AccountId'}
   AlertsSubscription:
     Type: AWS::SNS::Subscription
     Properties:
@@ -365,6 +389,33 @@ Resources:
       ComparisonOperator: GreaterThanThreshold
       AlarmActions: [!Ref AlertsTopic]
       TreatMissingData: notBreaching
+  IteratorAgeAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Consumidor Kinesis con retraso mayor a dos minutos
+      Namespace: AWS/Kinesis
+      MetricName: GetRecords.IteratorAgeMilliseconds
+      Dimensions: [{Name: StreamName, Value: !Ref EventsStream}]
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 120000
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions: [!Ref AlertsTopic]
+      TreatMissingData: notBreaching
+  GlueFailureRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Aviso de fallo de jobs Glue de TiendaCol
+      EventPattern:
+        source: [aws.glue]
+        detail-type: [Glue Job State Change]
+        detail:
+          jobName: [!Sub '${Prefix}-streaming', !Sub '${Prefix}-gold-batch']
+          state: [FAILED, TIMEOUT]
+      Targets:
+        - Arn: !Ref AlertsTopic
+          Id: GlueFailureSns
   CartsDlqAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -407,7 +458,7 @@ Resources:
                 Resource: [!Sub '${LakeBucket.Arn}/*', !Sub '${OpsBucket.Arn}/airflow/*', !Sub '${OpsBucket.Arn}/athena-results/*']
               - Effect: Allow
                 Action: [s3:PutObject]
-                Resource: [!Sub '${LakeBucket.Arn}/landing/masters/*', !Sub '${OpsBucket.Arn}/athena-results/*']
+                Resource: [!Sub '${LakeBucket.Arn}/landing/masters/*', !Sub '${OpsBucket.Arn}/athena-results/*', !Sub '${OpsBucket.Arn}/airflow-logs/*']
               - Effect: Allow
                 Action: [kms:Decrypt, kms:GenerateDataKey]
                 Resource: !Sub 'arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/*'
@@ -435,6 +486,50 @@ Resources:
     Condition: Airflow
     Properties:
       Roles: [!Ref AirflowRole]
+  SupersetRole:
+    Type: AWS::IAM::Role
+    Condition: Superset
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: ec2.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Policies:
+        - PolicyName: TiendaColAnalyticsRead
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [athena:StartQueryExecution, athena:GetQueryExecution, athena:GetQueryResults]
+                Resource: !Sub 'arn:${AWS::Partition}:athena:${AWS::Region}:${AWS::AccountId}:workgroup/${Prefix}-analytics'
+              - Effect: Allow
+                Action: [glue:GetDatabase, glue:GetDatabases, glue:GetTable, glue:GetTables, glue:GetPartitions]
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:catalog'
+                  - !Sub 'arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:database/tiendacol_*'
+                  - !Sub 'arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:table/tiendacol_*/*'
+              - Effect: Allow
+                Action: [s3:ListBucket, s3:GetBucketLocation]
+                Resource: [!GetAtt LakeBucket.Arn, !GetAtt OpsBucket.Arn]
+              - Effect: Allow
+                Action: [s3:GetObject]
+                Resource: [!Sub '${LakeBucket.Arn}/*', !Sub '${OpsBucket.Arn}/superset/*', !Sub '${OpsBucket.Arn}/athena-results/*']
+              - Effect: Allow
+                Action: [s3:PutObject]
+                Resource: !Sub '${OpsBucket.Arn}/athena-results/*'
+              - Effect: Allow
+                Action: [kms:Decrypt, kms:GenerateDataKey]
+                Resource: !Sub 'arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/*'
+                Condition: {StringEquals: {'kms:ViaService': !Sub 's3.${AWS::Region}.amazonaws.com'}}
+  SupersetProfile:
+    Type: AWS::IAM::InstanceProfile
+    Condition: Superset
+    Properties:
+      Roles: [!Ref SupersetRole]
   AirflowSg:
     Type: AWS::EC2::SecurityGroup
     Condition: Airflow
@@ -490,6 +585,46 @@ Resources:
             -v /opt/tiendacol/logs:/opt/airflow/logs \
             -v /opt/tiendacol/data:/opt/airflow/data \
             apache/airflow:2.10.5-python3.11 standalone
+  SupersetInstance:
+    Type: AWS::EC2::Instance
+    Condition: Superset
+    Properties:
+      ImageId: '{{resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64}}'
+      InstanceType: t3.medium
+      IamInstanceProfile: !Ref SupersetProfile
+      SubnetId: !Ref AirflowSubnetId
+      SecurityGroupIds: [!Ref AirflowSg]
+      MetadataOptions: {HttpTokens: required, HttpEndpoint: enabled, HttpPutResponseHopLimit: 2}
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs: {VolumeSize: 20, VolumeType: gp3, Encrypted: true}
+      Tags:
+        - {Key: Name, Value: !Sub '${Prefix}-superset'}
+        - {Key: Project, Value: TiendaCol}
+        - {Key: Owner, Value: DanielArcila}
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euo pipefail
+          dnf install -y docker awscli
+          systemctl enable --now docker
+          mkdir -p /opt/tiendacol/superset /opt/tiendacol/superset-home
+          chown -R 1000:0 /opt/tiendacol/superset-home
+          aws s3 cp s3://${OpsBucket}/superset/Dockerfile /opt/tiendacol/superset/Dockerfile --region ${AWS::Region}
+          aws s3 cp s3://${OpsBucket}/superset/superset_config.py /opt/tiendacol/superset/superset_config.py --region ${AWS::Region}
+          openssl rand -hex 32 > /opt/tiendacol/superset/secret-key
+          openssl rand -hex 18 > /opt/tiendacol/superset/admin-password
+          chmod 600 /opt/tiendacol/superset/secret-key /opt/tiendacol/superset/admin-password
+          docker build -t tiendacol-superset:3.1.3 /opt/tiendacol/superset
+          docker run -d --name tiendacol-superset --restart unless-stopped --network host \
+            -e AWS_DEFAULT_REGION=${AWS::Region} \
+            -e SUPERSET_SECRET_KEY="$(cat /opt/tiendacol/superset/secret-key)" \
+            -e SUPERSET_ADMIN_PASSWORD="$(cat /opt/tiendacol/superset/admin-password)" \
+            -e SUPERSET_CONFIG_PATH=/app/superset_config.py \
+            -v /opt/tiendacol/superset/superset_config.py:/app/superset_config.py:ro \
+            -v /opt/tiendacol/superset-home:/app/superset_home \
+            tiendacol-superset:3.1.3 \
+            sh -c 'superset db upgrade && (superset fab create-admin --username admin --firstname Admin --lastname TiendaCol --email admin@tiendacol.local --password "$SUPERSET_ADMIN_PASSWORD" || true) && superset init && gunicorn -w 2 --timeout 120 -b 127.0.0.1:8088 "superset.app:create_app()"'
 Outputs:
   LakeBucket: {Value: !Ref LakeBucket}
   OpsBucket: {Value: !Ref OpsBucket}
@@ -506,3 +641,6 @@ Outputs:
   AirflowInstanceId:
     Condition: Airflow
     Value: !Ref AirflowInstance
+  SupersetInstanceId:
+    Condition: Superset
+    Value: !Ref SupersetInstance

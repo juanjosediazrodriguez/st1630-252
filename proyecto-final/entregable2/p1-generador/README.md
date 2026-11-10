@@ -71,6 +71,8 @@ cuenta en el reporte (`stats`) para cuadrar contra Bronze/Silver. Ajustables con
 
 Detalles que importan al reproducirlos:
 
+- Para repetir un escenario en el mismo lago, usar `--scenario-seed` con un número diferente; así
+  se generan nuevos `event_id` y la deduplicación de Silver no descarta la repetición.
 - **RF-08 necesita tráfico de fondo.** El watermark de Spark solo avanza con eventos nuevos (E1,
   ADR-2); el escenario emite un `page_view` cada 10 s de un usuario de ruido. No lo apagues.
 - **Fixtures `TEST-*`**: `masters` incluye 5 productos y 4 clientes de prueba con stock/precio/ciudad
@@ -96,18 +98,18 @@ que Bronze conserva 10.100 y Silver 10.000.
 
 ## Superset
 
-`superset/docker-compose.yml` levanta Superset local con `pyathena`. Pasos: copiar `.env.example` a
-`.env` (credenciales temporales del Learner Lab: **no subirlas a Git**), `docker compose up -d --build`,
-abrir `http://localhost:8088` y crear la conexión
+`superset/docker-compose.yml` levanta Superset local con `pyathena` si Docker está disponible.
+El despliegue AWS de P4 también crea una EC2 de Superset con rol IAM y sin puertos entrantes;
+`setup_superset.py` registra la conexión, cuatro datasets, cuatro gráficos y el dashboard.
+Para la variante local: copiar `.env.example` a `.env` (credenciales de la cuenta: **no subirlas a Git**),
+ejecutar `docker compose up -d --build`, abrir `http://localhost:8088` y crear la conexión
 
 ```
-awsathena+rest://@athena.us-east-1.amazonaws.com:443/tiendacol_gold?s3_staging_dir=s3://<BUCKET-OPS>/athena-results/&work_group=primary
+awsathena+rest://@athena.us-east-1.amazonaws.com:443/tiendacol_gold?s3_staging_dir=s3://<BUCKET-OPS>/athena-results/&work_group=tiendacol-analytics
 ```
 
-`superset/datasets.sql` trae la consulta de cada gráfico (ventas por minuto total y por categoría,
-embudo, ventas/ticket, frescura). **Los nombres de tablas/columnas son una propuesta**: hay que
-alinearlos con el DDL de P3 en la Fase 0. Las credenciales del Learner Lab caducan: renovar `.env`
-y reiniciar el contenedor.
+`superset/datasets.sql` trae las consultas de ventas por minuto, embudo, ventas/ticket y frescura,
+alineadas con el DDL de P3. En el despliegue EC2, el rol de instancia evita claves AWS estáticas.
 
 ## Contratos — decisiones que propongo cerrar en la Fase 0
 
@@ -133,9 +135,9 @@ y reiniciar el contenedor.
 - **Probado**: generador, maestros, escenarios y verificadores con 36 pruebas locales; Kinesis con un
   cliente simulado (reintento de registros rechazados, límites de 500 registros / 5 MiB, ruteo por stream).
   Sin red, el generador sostiene ≈10.000 ev/s.
-- **No probado contra AWS real.** Falta: `PutRecords` real, la rampa a 5.000 ev/s sobre 6 shards (ahí se
-  conoce el máximo que aguanta la EC2/máquina de origen, RNF-01), `verify` contra Athena/Delta reales
-  y el conector Athena de Superset.
+- **Integración AWS desde P4:** `PutRecords` real, Bronze/Silver/Gold, Athena y el conector
+  PyAthena de Superset se probaron en la cuenta de TiendaCol. La evidencia de escenarios AWS se
+  guarda en `../p4-infra-orquestacion/evidence/aws-scenarios/`; la rampa RNF-01 se mide por separado.
 - **Riesgo del Learner Lab**: en el Lab 2b el rol `voclabs` no tenía `kinesis:CreateStream`
   (`AMBIENTE.md`, 2026-09-13). Es lo primero que debe confirmar P4 en la Fase 1; sin Kinesis no hay
   `--sink kinesis` y habría que replantear el transporte.

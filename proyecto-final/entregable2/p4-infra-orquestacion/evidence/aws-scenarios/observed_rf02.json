@@ -1,0 +1,9 @@
+{
+  "checked_at": "2026-11-10T04:52:40.640698+00:00",
+  "ok": true,
+  "result": "[PASA ] RF-02 órdenes, líneas, pagos y cambios de estado: {\"ordenes_esperadas\": 100, \"ordenes_con_problema\": [], \"cambios_faltantes\": 0}",
+  "scenario_t0": "2026-11-10T04:52:27.330Z",
+  "scenario_seed": 1002,
+  "masters_day_index": 1,
+  "bronze_rows_since_start": 120
+}

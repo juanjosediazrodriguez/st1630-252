@@ -132,7 +132,7 @@ FROM (
     UNION ALL
     SELECT event_id FROM tiendacol_gold.fact_funnel_event
 ) g
-LEFT JOIN tiendacol_bronze.events b
+LEFT JOIN (SELECT DISTINCT event_id FROM tiendacol_lake.bronze_events) b
     ON b.event_id = g.event_id;
 
 

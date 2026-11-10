@@ -5,7 +5,7 @@ import os
 import sys
 import tempfile
 import time
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -46,9 +46,20 @@ DEFAULT = {"owner": "DanielArcila", "retries": 0, "on_failure_callback": on_fail
 def load_masters(**_kwargs):
     from tiendacol_gen.masters import build_masters, upload_to_s3, write_masters
 
-    day = datetime.now(BOGOTA).date().isoformat()
+    today = datetime.now(BOGOTA).date()
+    day = today.isoformat()
+    # La primera carga fija la semilla del día 0; los días posteriores generan
+    # cambios reales para que Gold pueda registrar historial SCD Tipo 2.
+    response = client("s3").list_objects_v2(Bucket=LAKE, Prefix="landing/masters/_manifest_dt=")
+    previous = sorted(
+        key.split("_manifest_dt=", 1)[1].split(".json", 1)[0]
+        for obj in response.get("Contents", [])
+        if (key := obj["Key"]).endswith(".json")
+    )
+    first_day = date.fromisoformat(previous[0]) if previous else today
+    day_index = max(0, (today - first_day).days)
     with tempfile.TemporaryDirectory(prefix="tiendacol-masters-") as tmp:
-        masters = build_masters(seed=1630, day_index=0, n_products=1000, n_customers=2000, fixtures=True)
+        masters = build_masters(seed=1630, day_index=day_index, n_products=1000, n_customers=2000, fixtures=True)
         manifest = write_masters(masters, Path(tmp), day)
         count = upload_to_s3(Path(tmp), LAKE)
     if count != 5 or not all(n > 0 for n in manifest["counts"].values()):

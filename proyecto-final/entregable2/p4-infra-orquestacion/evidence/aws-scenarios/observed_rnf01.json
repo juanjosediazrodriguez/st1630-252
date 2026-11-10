@@ -1,0 +1,81 @@
+{
+  "start": "2026-11-10T05:02:03.744099+00:00",
+  "end": "2026-11-10T05:07:05.001199+00:00",
+  "shards": 6,
+  "steps": [
+    {
+      "target_rate": 500,
+      "seconds": 60.0,
+      "emitted": 29951,
+      "achieved_rate": 499.2,
+      "sustained": true
+    },
+    {
+      "target_rate": 1000,
+      "seconds": 60.0,
+      "emitted": 59900,
+      "achieved_rate": 998.3,
+      "sustained": true
+    },
+    {
+      "target_rate": 2000,
+      "seconds": 60.0,
+      "emitted": 119801,
+      "achieved_rate": 1996.7,
+      "sustained": true
+    },
+    {
+      "target_rate": 3000,
+      "seconds": 60.0,
+      "emitted": 179701,
+      "achieved_rate": 2995.0,
+      "sustained": true
+    },
+    {
+      "target_rate": 5000,
+      "seconds": 60.0,
+      "emitted": 299505,
+      "achieved_rate": 4991.7,
+      "sustained": true
+    }
+  ],
+  "sink": {
+    "ok": 688858
+  },
+  "iterator_age": [
+    {
+      "timestamp": "2026-11-10T05:01:00+00:00",
+      "max_ms": 32000.0
+    },
+    {
+      "timestamp": "2026-11-10T05:02:00+00:00",
+      "max_ms": 32000.0
+    },
+    {
+      "timestamp": "2026-11-10T05:03:00+00:00",
+      "max_ms": 0.0
+    },
+    {
+      "timestamp": "2026-11-10T05:04:00+00:00",
+      "max_ms": 1000.0
+    },
+    {
+      "timestamp": "2026-11-10T05:05:00+00:00",
+      "max_ms": 19000.0
+    },
+    {
+      "timestamp": "2026-11-10T05:06:00+00:00",
+      "max_ms": 34000.0
+    },
+    {
+      "timestamp": "2026-11-10T05:07:00+00:00",
+      "max_ms": 75000.0
+    },
+    {
+      "timestamp": "2026-11-10T05:08:00+00:00",
+      "max_ms": 84000.0
+    }
+  ],
+  "maximum_measured_events_per_second": 4991.7,
+  "all_steps_sustained": true
+}

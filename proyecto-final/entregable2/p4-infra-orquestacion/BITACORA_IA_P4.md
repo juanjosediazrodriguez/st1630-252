@@ -13,8 +13,14 @@ Responsable: Daniel Arcila Salazar. Se usó Codex para inspeccionar contratos P1
 - El registro en Athena requirió agregar permisos al rol de Airflow y omitir `CREATE DATABASE`, porque CloudFormation ya crea ambas bases. La consulta de ventas confirmó 100 órdenes, COP 14.561.000 y ticket promedio COP 145.610.
 - La cuenta nueva devolvió `KMS NotFoundException` para la clave administrada de DynamoDB durante el primer intento. Tras propagarse las claves, se actualizó el stack con KMS administrado por AWS para S3, Kinesis y DynamoDB. SQS conserva SSE-SQS. El script ahora espera a que KMS esté listo antes de crear recursos.
 
-## Pendientes de la demo
+## Integración y evidencia posterior
 
-- El DAG `tiendacol_gold_hourly` terminó en `success` y una segunda ejecución mantuvo 100 órdenes y COP 14.561.000 de ventas (idempotencia sobre la muestra).
-- Ejecutar escenarios RF-07 y RF-08 en tiempo real si se van a mostrar sus latencias; RF-08 requiere unos 40 minutos y tráfico de fondo para avanzar el watermark.
-- Detener Glue Streaming y EC2 entre sesiones. Kinesis permanece activo hasta eliminar el stack.
+- Se probó el recorrido real Kinesis → Glue Streaming → Bronze/Silver/Gold → Athena → Superset. El dashboard de Superset está en otra EC2, con rol IAM propio y acceso mediante Session Manager, sin puertos entrantes.
+- RF-01/02/03/05/06/07/08/09/12, RNF-03 y SCD2 tienen verificaciones reproducibles y resultados observados en `evidence/aws-scenarios/`. El destinatario confirmó por correo las notificaciones RF-07 y RF-12. RF-08 se midió durante su ventana de 30 minutos con tráfico de fondo para avanzar el watermark.
+- En RF-12 se introdujo un maestro inválido, se verificaron tareas dependientes bloqueadas, se restauró el objeto S3 y la siguiente ejecución completó las cuatro tareas. El script de prueba restaura S3 en `finally`.
+- Se desplegaron alarmas de DLQ y de atraso de Kinesis, un evento de fallo Glue a SNS y un presupuesto de USD 25. Se archivaron logs de Airflow en S3 ops.
+- Para RNF-01, un intento directo de cambiar Kinesis de 1 a 6 shards falló porque AWS limita cada actualización a un máximo del doble. `deploy.py` ahora escala por etapas (1 → 2 → 4 → 6) y devuelve el stream por etapas después de la prueba.
+- La rampa de cinco minutos emitió 688.858 eventos sin errores de `PutRecords`. Las tasas observadas fueron 499,2; 998,3; 1.996,7; 2.995,0 y 4.991,7 eventos/s durante 60 segundos por escalón. CloudWatch registró un máximo de 84 segundos de `GetRecords.IteratorAgeMilliseconds` en la ventana medida; el reporte íntegro es `observed_rnf01.json`.
+- `tiendacol_gold_hourly` mantuvo 100 órdenes y COP 14.561.000 en una segunda ejecución sobre la muestra inicial. El verificador `verify_gold_aws.py` consulta RF-10, RF-11 y RNF-06 en Athena. Se corrigió en la consulta de trazabilidad el nombre real de la tabla Bronze y se deduplican sus `event_id` antes de cruzar con Gold.
+
+Antes de cada sesión se inicia Airflow y Superset; al terminar se detienen Glue Streaming y ambas EC2. Kinesis permanece activo hasta eliminar el stack después de la evaluación.

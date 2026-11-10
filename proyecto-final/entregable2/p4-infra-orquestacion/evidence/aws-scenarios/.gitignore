@@ -1,0 +1,4 @@
+# Los oráculos completos contienen miles de eventos y se regeneran con las semillas documentadas.
+expected_rf01.json
+expected_rf05.json
+expected_rnf03.json

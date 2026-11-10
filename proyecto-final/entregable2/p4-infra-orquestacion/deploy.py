@@ -41,14 +41,17 @@ def config() -> tuple[dict, boto3.Session]:
     return values, session
 
 
-def parameters(cfg: dict, apps: bool, airflow: bool, vpc: str = "", subnet: str = "") -> list[dict]:
+def parameters(cfg: dict, apps: bool, airflow: bool, vpc: str = "", subnet: str = "", shards: int = 1,
+               superset: bool = False) -> list[dict]:
     values = {
         "Prefix": cfg["PROJECT_PREFIX"],
         "AlertEmail": cfg["ALERT_EMAIL"],
         "BudgetEmail": cfg["BUDGET_EMAIL"],
         "MonthlyBudgetUsd": cfg["MONTHLY_BUDGET_USD"],
+        "StreamShardCount": shards,
         "EnableApplications": str(apps).lower(),
         "EnableAirflow": str(airflow).lower(),
+        "EnableSuperset": str(superset).lower(),
         "AirflowVpcId": vpc,
         "AirflowSubnetId": subnet,
     }
@@ -58,6 +61,15 @@ def parameters(cfg: dict, apps: bool, airflow: bool, vpc: str = "", subnet: str 
 def outputs(cfn, stack: str) -> dict[str, str]:
     data = cfn.describe_stacks(StackName=stack)["Stacks"][0]
     return {x["OutputKey"]: x["OutputValue"] for x in data.get("Outputs", [])}
+
+
+def shard_steps(current: int, target: int) -> list[int]:
+    """Kinesis solo permite duplicar o reducir a la mitad por operación."""
+    steps = []
+    while current != target:
+        current = min(target, current * 2) if current < target else max(target, (current + 1) // 2)
+        steps.append(current)
+    return steps
 
 
 def apply_stack(cfn, stack: str, params: list[dict]) -> dict[str, str]:
@@ -140,6 +152,13 @@ def upload_artifacts(s3, out: dict) -> None:
     for key, path in scripts.items():
         s3.upload_file(str(path), ops, key)
         print(f"Subido s3://{ops}/{key}")
+    for filename in ("Dockerfile", "superset_config.py"):
+        path = E2 / "p1-generador" / "superset" / filename
+        key = f"superset/{filename}"
+        s3.upload_file(str(path), ops, key)
+        print(f"Subido s3://{ops}/{key}")
+    s3.upload_file(str(HERE / "bootstrap_superset.py"), ops, "superset/bootstrap_superset.py")
+    print(f"Subido s3://{ops}/superset/bootstrap_superset.py")
 
 
 def default_network(ec2) -> tuple[str, str]:
@@ -175,7 +194,10 @@ def wait_for_kms(session) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--no-airflow", action="store_true", help="Crear recursos administrados y Lambdas sin EC2")
+    parser.add_argument("--no-superset", action="store_true", help="No crear EC2 de Superset")
     parser.add_argument("--upload-only", action="store_true", help="Actualizar paquetes en S3 sin modificar CloudFormation")
+    parser.add_argument("--shards", type=int, choices=range(1, 7), default=1,
+                        help="Shards del stream (1 demo; 6 para RNF-01)")
     args = parser.parse_args()
     cfg, session = config()
     identity = session.client("sts").get_caller_identity()
@@ -202,17 +224,25 @@ def main() -> None:
             vpc, subnet = "", ""
         else:
             vpc, subnet = default_network(session.client("ec2"))
-        final = apply_stack(cfn, stack, parameters(cfg, True, not args.no_airflow, vpc, subnet))
+        open_shards = session.client("kinesis").describe_stream_summary(
+            StreamName=current["StreamName"])["StreamDescriptionSummary"]["OpenShardCount"]
+        steps = shard_steps(open_shards, args.shards) or [args.shards]
+        for count in steps:
+            print(f"Kinesis: {open_shards} -> {count} shards", flush=True)
+            final = apply_stack(cfn, stack, parameters(cfg, True, not args.no_airflow, vpc, subnet, count,
+                                                      not args.no_airflow and not args.no_superset))
+            open_shards = count
         print(json.dumps(final, indent=2))
         return
-    base = apply_stack(cfn, stack, parameters(cfg, False, False))
+    base = apply_stack(cfn, stack, parameters(cfg, False, False, shards=args.shards))
     upload_artifacts(session.client("s3"), base)
-    apps = apply_stack(cfn, stack, parameters(cfg, True, False))
+    apps = apply_stack(cfn, stack, parameters(cfg, True, False, shards=args.shards))
     if args.no_airflow:
         final = apps
     else:
         vpc, subnet = default_network(session.client("ec2"))
-        final = apply_stack(cfn, stack, parameters(cfg, True, True, vpc, subnet))
+        final = apply_stack(cfn, stack, parameters(cfg, True, True, vpc, subnet, args.shards,
+                                                  not args.no_superset))
     print(json.dumps(final, indent=2))
     print("Glue Streaming no está iniciado. Cargar maestros y lanzar tiendacol_bootstrap en Airflow.")
 

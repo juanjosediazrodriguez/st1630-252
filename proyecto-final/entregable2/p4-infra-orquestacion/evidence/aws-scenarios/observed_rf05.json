@@ -1,0 +1,10 @@
+{
+  "checked_at": "2026-11-10T04:54:25.186099+00:00",
+  "ok": true,
+  "result": "[PASA ] RF-05 validación, cuarentena y deduplicación: {\"silver\": \"9800 (esperado 9800)\", \"cuarentena\": \"100 (esperado 100)\", \"duplicados_en_silver\": 0, \"faltan_en_silver\": []}",
+  "scenario_t0": "2026-11-10T04:53:38.041Z",
+  "scenario_seed": 1005,
+  "masters_day_index": 1,
+  "silver_expected_ids_found": 9800,
+  "quarantine_rows": 100
+}

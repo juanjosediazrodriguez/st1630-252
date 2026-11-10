@@ -1,8 +1,7 @@
 -- Datasets de Superset (cada bloque = un dataset virtual / un gráfico).
--- Conexión:  awsathena+rest://@athena.us-east-1.amazonaws.com:443/tiendacol_gold?s3_staging_dir=s3://<BUCKET-OPS>/athena-results/&work_group=primary
+-- Conexión:  awsathena+rest://@athena.us-east-1.amazonaws.com:443/tiendacol_gold?s3_staging_dir=s3://<BUCKET-OPS>/athena-results/&work_group=tiendacol-analytics
 --
--- !! Los nombres de tablas y columnas son la PROPUESTA de P1 a partir de la tabla de grano del E1 (ADR-3).
---    Ajustarlos al DDL definitivo de P3 en la Fase 0. Si P3 cambia algo, solo se edita este archivo.
+-- Esquema contrastado con las tablas Athena registradas por P3 en AWS.
 
 -- 1. RF-09 · Ventas por minuto (total) — gráfico de línea, últimos 60 min, refresco 30 s
 --    Reglas: la fila total tiene category_id NULL.

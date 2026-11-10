@@ -69,7 +69,8 @@ def cmd_scenario(a):
     if a.name == "list":
         print("\n".join(scenarios.SCENARIOS))
         return
-    sc = scenarios.SCENARIOS[a.name](_masters(a))
+    kwargs = {"seed": a.scenario_seed} if a.scenario_seed is not None else {}
+    sc = scenarios.SCENARIOS[a.name](_masters(a), **kwargs)
     path = scenarios.write_expected(sc, a.expected_dir)
     print(f"escenario {sc.name}: {len(sc.items)} registros · esperado en {path}")
     if sc.realtime and not a.fast:
@@ -156,6 +157,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("name", choices=["list", *scenarios.SCENARIOS])
     s.add_argument("--expected-dir", default="out/expected")
     s.add_argument("--fast", action="store_true", help="no esperar tiempo real (invalida RF-07/08/09)")
+    s.add_argument("--scenario-seed", type=int, help="semilla distinta para repetir el escenario sin duplicar event_id")
     s.set_defaults(fn=cmd_scenario)
 
     v = sub.add_parser("verify", help="compara lo esperado contra los datos observados")

@@ -253,7 +253,7 @@ def rf09(m: Masters, orders_a: int = 12, orders_b: int = 8, seed: int = 109) -> 
     for i, (pid, price) in enumerate(specs):
         off = 3 + (i * 50.0 / len(specs))  # reparte dentro de los primeros 53 s del minuto
         ts = t0 + timedelta(seconds=off)
-        items.append(Scheduled(off, f.order_created(f"O-RF09-{i:03d}", s.user_id, s.city, s.department,
+        items.append(Scheduled(off, f.order_created(f"O-RF09-{seed}-{i:03d}", s.user_id, s.city, s.department,
                                                      [{"product_id": pid, "quantity": 1, "unit_price": price, "discount": 0.0}], ts)))
     cats = {m.products[p]["category_id"]: 0 for p, _ in specs}
     vals = dict.fromkeys(cats, 0.0)

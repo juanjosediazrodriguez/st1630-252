@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-11-10T04:45:55.626911+00:00",
+  "ok": true,
+  "result": "[PASA ] RF-08 carritos abandonados: {\"problemas\": {}}",
+  "first_seen": {
+    "U-TEST-A": "2026-11-10T04:39:29.573529+00:00",
+    "U-TEST-B": null,
+    "U-TEST-C": null
+  },
+  "carts": {
+    "U-TEST-A": {
+      "cart_value": 600000.0,
+      "abandoned_at": "2026-11-10T04:35:52.777Z",
+      "product_ids": [
+        "TEST-RF09-A"
+      ]
+    }
+  }
+}

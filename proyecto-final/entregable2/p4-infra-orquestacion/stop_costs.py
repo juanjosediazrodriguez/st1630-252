@@ -18,9 +18,11 @@ def main() -> None:
             print(f"Deteniendo {job}: {active}")
         else:
             print(f"{job}: sin ejecución activa")
-    if "AirflowInstanceId" in out:
-        ec2 = session.client("ec2")
-        instance = out["AirflowInstanceId"]
+    ec2 = session.client("ec2")
+    for key in ("AirflowInstanceId", "SupersetInstanceId"):
+        if key not in out:
+            continue
+        instance = out[key]
         state = ec2.describe_instances(InstanceIds=[instance])["Reservations"][0]["Instances"][0]["State"]["Name"]
         if state not in ("stopped", "stopping"):
             ec2.stop_instances(InstanceIds=[instance])

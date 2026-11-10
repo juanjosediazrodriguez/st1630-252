@@ -114,12 +114,14 @@ proyecto-final/entregable2/
 
 ## 7. Despliegue y demo en AWS
 
-P4 implementó el stack y los DAGs en [`p4-infra-orquestacion/`](p4-infra-orquestacion/README.md). El despliegue reproduce S3, Kinesis, Glue Streaming y Batch, SQS con DLQ, SNS, DynamoDB, IAM, Athena, CloudWatch, Budgets y una EC2 dedicada a Airflow.
+P4 implementó el stack y los DAGs en [`p4-infra-orquestacion/`](p4-infra-orquestacion/README.md). El despliegue reproduce S3, Kinesis, Glue Streaming y Batch, SQS con DLQ, SNS, DynamoDB, IAM, Athena, CloudWatch, Budgets y dos EC2: Airflow para control y Superset para visualización. Ambas se acceden mediante SSM, sin puertos entrantes.
 
 ```powershell
 # Desde proyecto-final; requiere entregable2/.env completo y cuenta AWS Paid con créditos.
 python entregable2/p4-infra-orquestacion/deploy.py
 python entregable2/p4-infra-orquestacion/verify.py --ssm
+python entregable2/p4-infra-orquestacion/setup_superset.py
+python entregable2/p4-infra-orquestacion/verify_superset.py
 ```
 
 Confirmar el correo de SNS. En Airflow, ejecutar `tiendacol_bootstrap` para cargar maestros y arrancar Glue Streaming. Después de que el job esté en `RUNNING`, enviar eventos con P1 usando los mismos parámetros que los maestros del DAG:
@@ -129,4 +131,4 @@ python entregable2/p4-infra-orquestacion/run_generator.py run --sink kinesis --s
 python entregable2/p4-infra-orquestacion/run_generator.py scenario rf13 --sink kinesis --stream tiendacol-events --region us-east-1 --seed 1630 --products 1000 --customers 2000 --fast
 ```
 
-El DAG `tiendacol_gold_hourly` ejecuta Glue Batch y registra las tablas Delta en Athena. Para terminar la sesión, ejecutar `tiendacol_stop_demo` y detener la EC2 si no se seguirá usando Airflow. Ver el [manual de P4](p4-infra-orquestacion/README.md) para las salidas del stack, la consulta SQL, control de costos y la desviación de cifrado KMS observada en la cuenta nueva.
+El DAG `tiendacol_gold_hourly` ejecuta Glue Batch y registra las tablas Delta en Athena. Las verificaciones AWS de RF-07/08/09 y Superset están en [`evidence/aws-scenarios/`](p4-infra-orquestacion/evidence/aws-scenarios/). Para terminar una sesión, ejecutar `tiendacol_stop_demo`, archivar los logs con `archive_airflow_logs.py` y detener ambas EC2 con `stop_costs.py`. El stream Kinesis permanece activo hasta eliminar el stack con `destroy_demo.py`. Ver el [manual de P4](p4-infra-orquestacion/README.md) para las salidas, consultas, pruebas, control de costos y diferencias justificadas con el diagrama inicial.
