@@ -7,17 +7,17 @@
     },
     "Ventas por minuto": {
       "id": 2,
-      "rows": 21
+      "rows": 29
     },
     "Embudo de conversión": {
       "id": 3,
-      "rows": 2
+      "rows": 3
     },
     "Ventas por categoría": {
       "id": 4,
-      "rows": 3
+      "rows": 5
     }
   },
   "ok": true,
-  "checked_at": "2026-11-10T04:39:41.319312+00:00"
+  "checked_at": "2026-11-10T05:50:56.850168+00:00"
 }

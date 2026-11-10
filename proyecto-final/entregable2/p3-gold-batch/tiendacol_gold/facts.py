@@ -6,6 +6,7 @@ escenarios de P1, garantizando compatibilidad total con `verify.py` y `datasets.
 from __future__ import annotations
 
 import json
+from functools import lru_cache
 import pandas as pd
 
 from .dimensions import (
@@ -82,6 +83,10 @@ def build_fact_sales_df(
     seller_key_by_id = dict(zip(dim_seller["seller_id"], dim_seller["seller_key"])) if not dim_seller.empty else {}
     cust_key_by_id = dict(zip(dim_customer["customer_id"], dim_customer["customer_key"])) if not dim_customer.empty else {}
 
+    @lru_cache(maxsize=None)
+    def product_version(product_id: str, event_date: str) -> dict | None:
+        return resolve_product_version(dim_product, product_id, event_date)
+
     # Estado más reciente por order_id si hay cambios de estado
     latest_status: dict[str, tuple[str, str]] = {}
     for r in df.to_dict("records"):
@@ -126,7 +131,7 @@ def build_fact_sales_df(
 
         for idx, line in enumerate(lines, start=1):
             pid = str(line["product_id"])
-            p_ver = resolve_product_version(dim_product, pid, order_date)
+            p_ver = product_version(pid, order_date)
             if p_ver:
                 p_key = str(p_ver["product_key"])
                 cat_id = int(p_ver["category_id"])
@@ -200,6 +205,10 @@ def build_fact_funnel_df(
     if df.empty:
         return pd.DataFrame(columns=cols)
 
+    @lru_cache(maxsize=None)
+    def product_version(product_id: str, event_date: str) -> dict | None:
+        return resolve_product_version(dim_product, product_id, event_date)
+
     # Mapa order_id -> lista de product_id desde orders_events
     order_products: dict[str, list[str]] = {}
     if orders_events is not None:
@@ -269,7 +278,7 @@ def build_fact_funnel_df(
                 continue
             seen_keys.add(f_id)
 
-            p_ver = resolve_product_version(dim_product, pid, ev_day)
+            p_ver = product_version(pid, ev_day)
             if p_ver:
                 p_key = str(p_ver["product_key"])
                 cat_id = int(p_ver["category_id"])

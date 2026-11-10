@@ -9,6 +9,12 @@ from deploy import HERE, config, outputs
 
 
 QUERIES = {
+    "scd2": """SELECT COUNT(*) AS changed_products
+                 FROM (SELECT product_id
+                       FROM tiendacol_gold.dim_product
+                       GROUP BY product_id
+                       HAVING COUNT(*) = 2
+                          AND SUM(CASE WHEN is_current THEN 1 ELSE 0 END) = 1)""",
     "rf10": """SELECT stage, COUNT(DISTINCT session_id) AS sessions
                FROM tiendacol_gold.fact_funnel_event
                GROUP BY stage ORDER BY stage""",
@@ -56,7 +62,9 @@ def main() -> None:
     stages = {row[0] for row in result["queries"]["rf10"][1:]}
     sales = result["queries"]["rf11"][1]
     trace = result["queries"]["rnf06"][1]
-    result["ok"] = ({"page_view", "add_to_cart", "purchase"} <= stages
+    scd2 = int(result["queries"]["scd2"][1][0])
+    result["ok"] = (scd2 >= 25
+                    and {"page_view", "add_to_cart", "purchase"} <= stages
                     and int(sales[0]) > 0 and float(sales[1]) > 0
                     and int(trace[0]) > 0 and int(trace[2]) == 0)
     path = HERE / "evidence" / "aws-scenarios" / "observed_gold.json"

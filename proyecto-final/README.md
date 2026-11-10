@@ -26,3 +26,4 @@ python entregable2/p4-infra-orquestacion/operate.py trigger-bootstrap
 El [manual de P4](entregable2/p4-infra-orquestacion/README.md) contiene los comandos para generar
 tráfico, consultar Gold, usar Airflow y Superset, ejecutar pruebas y retirar la infraestructura.
 La [bitácora consolidada](docs/bitacora_ia.md) registra el uso de agentes de IA.
+El [estado de evidencia](docs/entregable2/estado_evidencia.md) resume las pruebas ejecutadas en AWS.

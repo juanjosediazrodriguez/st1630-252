@@ -251,8 +251,8 @@ Resources:
         ScriptLocation: !Sub 's3://${OpsBucket}/glue/tiendacol_gold_batch.py'
       WorkerType: G.1X
       NumberOfWorkers: 2
-      MaxRetries: 1
-      Timeout: 15
+      MaxRetries: 0
+      Timeout: 30
       DefaultArguments:
         '--job-language': python
         '--datalake-formats': delta

@@ -9,7 +9,6 @@ import pandas as pd
 import numpy as np
 
 from .config import GoldConfig
-from .dimensions import apply_scd2_products_df
 from .facts import build_gold_star_from_data
 from .tables import (
     ensure_gold_tables,
@@ -92,8 +91,8 @@ def run_job(cfg: GoldConfig, spark) -> dict[str, int]:
     """Ejecuta el batch horario de Gold sobre Spark + Delta Lake:
 
     1. Asegura que las 9 tablas Delta de Gold existan en `<lake_root>/gold/`.
-    2. Lee todos los snapshots de maestros (`landing/masters/_manifest_dt=*.json`) y la
-       tabla `dim_product` actual para evolucionar el historial SCD Tipo 2 de manera idempotente.
+    2. Lee todos los snapshots de maestros (`landing/masters/_manifest_dt=*.json`) y
+       reconstruye el historial SCD Tipo 2 de manera determinista e idempotente.
     3. Lee `silver/events` (filtrando por `process_date` si fue indicado).
     4. Construye dimensiones (`dim_product`, `dim_seller`, `dim_customer`, `dim_location`,
        `dim_device`, `dim_datetime`), tablas de hechos (`fact_sales`, `fact_funnel_event`)
@@ -105,13 +104,6 @@ def run_job(cfg: GoldConfig, spark) -> dict[str, int]:
         log.info("Tablas Delta de Gold inicializadas: %s", created)
 
     snapshots = _load_spark_masters_snapshots(spark, cfg.masters_root)
-
-    # Si dim_product ya tenía filas en Gold, partir de ese estado para preservar SCD2 previo
-    existing_dim_product = None
-    if is_delta(spark, cfg.dim_product):
-        existing_pdf = spark.read.format("delta").load(cfg.dim_product).toPandas()
-        if not existing_pdf.empty:
-            existing_dim_product = existing_pdf
 
     # Leer eventos de Silver escritos por P2
     if is_delta(spark, cfg.silver_events):
@@ -127,14 +119,6 @@ def run_job(cfg: GoldConfig, spark) -> dict[str, int]:
     orders = [r for r in silver_records if r.get("stream") == "orders" or r.get("event_type") in ("order_created", "order_status_changed")]
 
     star = build_gold_star_from_data(clicks, orders, snapshots, top_affinity_k=cfg.top_affinity_k)
-
-    # Si ya existía dim_product en Gold, aplicar SCD2 incremental sobre la existente
-    if existing_dim_product is not None:
-        dim_p = existing_dim_product
-        for day, mdata in snapshots:
-            if "products" in mdata:
-                dim_p = apply_scd2_products_df(dim_p, mdata["products"], day)
-        star["dim_product"] = dim_p
 
     schemas = get_gold_schemas()
     merge_keys = {
@@ -179,8 +163,13 @@ def run_job(cfg: GoldConfig, spark) -> dict[str, int]:
         counts[name] = len(pdf)
         if pdf.empty:
             continue
-        sdf = spark.createDataFrame([_spark_record(r) for r in pdf.to_dict("records")], schema=schema)
+        records = [_spark_record(r) for r in pdf.to_dict("records")]
+        # Spark serializa cada partición de datos locales como una tarea RPC.
+        # Repartir la fuente evita superar el límite de 128 MiB con cargas grandes.
+        input_partitions = max(1, min(64, (len(records) + 9999) // 10000))
+        sdf = spark.createDataFrame(spark.sparkContext.parallelize(records, input_partitions), schema=schema)
         on_expr, upd = merge_keys[name]
+        output_files = max(cfg.write_files, min(16, (len(records) + 49999) // 50000))
         merge_delta_sql(
             spark,
             sdf,
@@ -188,7 +177,7 @@ def run_job(cfg: GoldConfig, spark) -> dict[str, int]:
             on_expr,
             update_set=upd,
             insert=True,
-            write_files=cfg.write_files,
+            write_files=output_files,
         )
         log.info("Tabla Gold %s actualizada (%d filas procesadas)", name, len(pdf))
 

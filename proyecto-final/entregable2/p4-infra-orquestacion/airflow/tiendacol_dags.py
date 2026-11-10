@@ -122,7 +122,7 @@ def check_silver(**_kwargs):
 def run_gold(**_kwargs):
     glue = client("glue")
     run_id = glue.start_job_run(JobName=GOLD_JOB)["JobRunId"]
-    deadline = time.monotonic() + 20 * 60
+    deadline = time.monotonic() + 35 * 60
     while time.monotonic() < deadline:
         state = glue.get_job_run(JobName=GOLD_JOB, RunId=run_id)["JobRun"]["JobRunState"]
         if state == "SUCCEEDED":
@@ -130,7 +130,7 @@ def run_gold(**_kwargs):
         if state in ("FAILED", "STOPPED", "TIMEOUT", "ERROR"):
             raise RuntimeError(f"Gold {run_id}: {state}")
         time.sleep(20)
-    raise TimeoutError(f"Gold {run_id} no terminó en 20 minutos")
+    raise TimeoutError(f"Gold {run_id} no terminó en 35 minutos")
 
 
 def register_catalog(**_kwargs):

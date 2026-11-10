@@ -53,7 +53,7 @@ El presupuesto mensual envía avisos al 50 % y 80 % del valor configurado; no es
 
 Consulta de negocio validada: `python entregable2/p4-infra-orquestacion/query_gold.py`. Con el escenario RF-13 se observaron 100 órdenes, COP 14.561.000 en ventas y ticket promedio COP 145.610. La segunda ejecución de Gold dejó los mismos resultados.
 
-Tras una ejecución Gold actualizada, `python entregable2/p4-infra-orquestacion/verify_gold_aws.py` consulta en Athena las etapas del embudo (RF-10), ventas y ticket promedio (RF-11) y el cruce de `event_id` de Gold con Bronze (RNF-06). Escribe `observed_gold.json` en `evidence/aws-scenarios/`.
+Tras una ejecución Gold actualizada, `python entregable2/p4-infra-orquestacion/verify_gold_aws.py` consulta en Athena SCD2, las etapas del embudo (RF-10), ventas y ticket promedio (RF-11) y el cruce de `event_id` de Gold con Bronze (RNF-06). Escribe `observed_gold.json` en `evidence/aws-scenarios/`. La ejecución Gold de la rampa completa tardó cerca de siete minutos con entrada repartida en grupos de 10.000 registros; a volúmenes mucho mayores convendría migrar las transformaciones pandas del driver a operaciones Spark distribuidas.
 
 ## Cifrado
 
