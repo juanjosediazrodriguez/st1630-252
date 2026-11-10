@@ -99,15 +99,6 @@ flowchart TD
 
 ---
 
-## 5. Puntos a Decidir entre el Equipo
-
-- [ ] **Quién escribe `agg_sales_minute`:** El diagrama establece que Gold tiene un único escritor (Glue Batch), pero el RF-09 exige latencia menor a 2 minutos y eso solo lo logra el streaming. Propuesta: Streaming escribe esa tabla y Batch el resto, justificado como *"un writer por tipo de tabla"*.
-- [ ] **Control de costos en AWS Academy:** Glue Streaming cobra mientras corre y Kinesis no se puede pausar. P4 deja listos el DAG `stop_demo` y la destrucción de recursos efímeros tras cada prueba. Ningún job queda encendido entre sesiones.
-- [ ] **Clave de partición del RF-08:** Usar `user_id` en el stream de `clickstream` para conservar el orden cronológico por usuario y detectar carritos abandonados.
-- [ ] **RF-13 (Opcional - Afinidad de productos):** Se implementará únicamente si P3 finaliza Gold con anticipación a la fase de integración.
-
----
-
 ## 6. Estructura del Directorio `entregable2`
 
 ```
