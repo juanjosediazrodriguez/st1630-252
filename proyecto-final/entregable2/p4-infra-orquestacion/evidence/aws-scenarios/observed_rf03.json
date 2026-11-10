@@ -1,0 +1,30 @@
+{
+  "checked_at": "2026-11-10T04:53:24.283573+00:00",
+  "ok": true,
+  "result": "[PASA ] RF-03 stock disponible: {\"productos\": 5, \"discrepancias\": {}}",
+  "scenario_t0": "2026-11-10T04:52:47.732Z",
+  "scenario_seed": 1003,
+  "masters_day_index": 0,
+  "stock": [
+    {
+      "product_id": "P000220",
+      "stock": 243
+    },
+    {
+      "product_id": "P000571",
+      "stock": 617
+    },
+    {
+      "product_id": "P000505",
+      "stock": 768
+    },
+    {
+      "product_id": "P000361",
+      "stock": 347
+    },
+    {
+      "product_id": "P000736",
+      "stock": 457
+    }
+  ]
+}

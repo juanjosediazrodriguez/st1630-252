@@ -1,0 +1,20 @@
+# Superset local (BI) -> Athena.
+# Arranque:  copiar .env.example a .env, editarlo y ejecutar  docker compose up -d --build
+services:
+  superset:
+    build: .
+    container_name: tiendacol-superset
+    ports: ["8088:8088"]
+    env_file: .env
+    environment:
+      SUPERSET_CONFIG_PATH: /app/superset_config.py
+    volumes:
+      - ./superset_config.py:/app/superset_config.py:ro
+      - superset_home:/app/superset_home
+    command: >
+      sh -c "superset db upgrade &&
+             superset fab create-admin --username admin --firstname Admin --lastname TiendaCol --email admin@tiendacol.local --password $${SUPERSET_ADMIN_PASSWORD} || true &&
+             superset init &&
+             gunicorn -w 2 --timeout 120 -b 0.0.0.0:8088 'superset.app:create_app()'"
+volumes:
+  superset_home:

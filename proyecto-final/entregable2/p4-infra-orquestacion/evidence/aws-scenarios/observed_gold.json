@@ -1,0 +1,56 @@
+{
+  "checked_at": "2026-11-10T05:50:19.736219+00:00",
+  "queries": {
+    "scd2": [
+      [
+        "changed_products"
+      ],
+      [
+        "25"
+      ]
+    ],
+    "rf10": [
+      [
+        "stage",
+        "sessions"
+      ],
+      [
+        "add_to_cart",
+        "67264"
+      ],
+      [
+        "page_view",
+        "85862"
+      ],
+      [
+        "purchase",
+        "14727"
+      ]
+    ],
+    "rf11": [
+      [
+        "orders",
+        "sales_cop",
+        "avg_ticket_cop"
+      ],
+      [
+        "15069",
+        "5.0660757E9",
+        "336191.9"
+      ]
+    ],
+    "rnf06": [
+      [
+        "total_gold_rows",
+        "linked_to_bronze",
+        "unlinked_events"
+      ],
+      [
+        "545169",
+        "545169",
+        "0"
+      ]
+    ]
+  },
+  "ok": true
+}

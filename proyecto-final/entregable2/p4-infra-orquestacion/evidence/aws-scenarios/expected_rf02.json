@@ -1,0 +1,2309 @@
+{
+ "scenario": "rf02",
+ "t0": "2026-11-10T04:52:27.330Z",
+ "sent": 120,
+ "expected": {
+  "orders": {
+   "O-RF02-0000": {
+    "lines": [
+     {
+      "product_id": "P000610",
+      "quantity": 1,
+      "unit_price": 121400.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000432",
+      "quantity": 1,
+      "unit_price": 68000.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000921",
+      "quantity": 1,
+      "unit_price": 236900.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 426300.0,
+     "status": "approved"
+    },
+    "total": 426300.0
+   },
+   "O-RF02-0001": {
+    "lines": [
+     {
+      "product_id": "P000496",
+      "quantity": 3,
+      "unit_price": 138700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000131",
+      "quantity": 3,
+      "unit_price": 148100.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 860400.0,
+     "status": "approved"
+    },
+    "total": 860400.0
+   },
+   "O-RF02-0002": {
+    "lines": [
+     {
+      "product_id": "P000096",
+      "quantity": 3,
+      "unit_price": 225800.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000725",
+      "quantity": 1,
+      "unit_price": 224800.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000446",
+      "quantity": 1,
+      "unit_price": 626700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 1528900.0,
+     "status": "approved"
+    },
+    "total": 1528900.0
+   },
+   "O-RF02-0003": {
+    "lines": [
+     {
+      "product_id": "P000808",
+      "quantity": 1,
+      "unit_price": 32600.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 32600.0,
+     "status": "approved"
+    },
+    "total": 32600.0
+   },
+   "O-RF02-0004": {
+    "lines": [
+     {
+      "product_id": "P000029",
+      "quantity": 3,
+      "unit_price": 85100.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000579",
+      "quantity": 3,
+      "unit_price": 53600.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 416100.0,
+     "status": "approved"
+    },
+    "total": 416100.0
+   },
+   "O-RF02-0005": {
+    "lines": [
+     {
+      "product_id": "P000775",
+      "quantity": 3,
+      "unit_price": 91000.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 273000.0,
+     "status": "approved"
+    },
+    "total": 273000.0
+   },
+   "O-RF02-0006": {
+    "lines": [
+     {
+      "product_id": "P000320",
+      "quantity": 2,
+      "unit_price": 45200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 90400.0,
+     "status": "approved"
+    },
+    "total": 90400.0
+   },
+   "O-RF02-0007": {
+    "lines": [
+     {
+      "product_id": "P000801",
+      "quantity": 2,
+      "unit_price": 35800.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000958",
+      "quantity": 1,
+      "unit_price": 269600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000665",
+      "quantity": 3,
+      "unit_price": 44700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 475300.0,
+     "status": "approved"
+    },
+    "total": 475300.0
+   },
+   "O-RF02-0008": {
+    "lines": [
+     {
+      "product_id": "P000671",
+      "quantity": 2,
+      "unit_price": 24300.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000959",
+      "quantity": 3,
+      "unit_price": 131300.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000708",
+      "quantity": 2,
+      "unit_price": 71600.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 585700.0,
+     "status": "approved"
+    },
+    "total": 585700.0
+   },
+   "O-RF02-0009": {
+    "lines": [
+     {
+      "product_id": "P000817",
+      "quantity": 2,
+      "unit_price": 173000.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000074",
+      "quantity": 3,
+      "unit_price": 167400.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000104",
+      "quantity": 1,
+      "unit_price": 75500.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 923700.0,
+     "status": "approved"
+    },
+    "total": 923700.0
+   },
+   "O-RF02-0010": {
+    "lines": [
+     {
+      "product_id": "P000071",
+      "quantity": 3,
+      "unit_price": 455300.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000401",
+      "quantity": 1,
+      "unit_price": 139100.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000321",
+      "quantity": 3,
+      "unit_price": 92200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 1781600.0,
+     "status": "approved"
+    },
+    "total": 1781600.0
+   },
+   "O-RF02-0011": {
+    "lines": [
+     {
+      "product_id": "P000071",
+      "quantity": 2,
+      "unit_price": 455300.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000978",
+      "quantity": 1,
+      "unit_price": 183300.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 1093900.0,
+     "status": "approved"
+    },
+    "total": 1093900.0
+   },
+   "O-RF02-0012": {
+    "lines": [
+     {
+      "product_id": "P000830",
+      "quantity": 1,
+      "unit_price": 184500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000822",
+      "quantity": 1,
+      "unit_price": 90100.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000563",
+      "quantity": 1,
+      "unit_price": 99900.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 374500.0,
+     "status": "approved"
+    },
+    "total": 374500.0
+   },
+   "O-RF02-0013": {
+    "lines": [
+     {
+      "product_id": "P000783",
+      "quantity": 2,
+      "unit_price": 297700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 595400.0,
+     "status": "approved"
+    },
+    "total": 595400.0
+   },
+   "O-RF02-0014": {
+    "lines": [
+     {
+      "product_id": "P000495",
+      "quantity": 1,
+      "unit_price": 185300.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 185300.0,
+     "status": "approved"
+    },
+    "total": 185300.0
+   },
+   "O-RF02-0015": {
+    "lines": [
+     {
+      "product_id": "P000276",
+      "quantity": 1,
+      "unit_price": 82600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000859",
+      "quantity": 1,
+      "unit_price": 185400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 268000.0,
+     "status": "approved"
+    },
+    "total": 268000.0
+   },
+   "O-RF02-0016": {
+    "lines": [
+     {
+      "product_id": "P000185",
+      "quantity": 3,
+      "unit_price": 518600.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 1555800.0,
+     "status": "approved"
+    },
+    "total": 1555800.0
+   },
+   "O-RF02-0017": {
+    "lines": [
+     {
+      "product_id": "P000840",
+      "quantity": 3,
+      "unit_price": 60700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 182100.0,
+     "status": "approved"
+    },
+    "total": 182100.0
+   },
+   "O-RF02-0018": {
+    "lines": [
+     {
+      "product_id": "P000086",
+      "quantity": 1,
+      "unit_price": 253900.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 253900.0,
+     "status": "approved"
+    },
+    "total": 253900.0
+   },
+   "O-RF02-0019": {
+    "lines": [
+     {
+      "product_id": "P000243",
+      "quantity": 1,
+      "unit_price": 73000.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 73000.0,
+     "status": "approved"
+    },
+    "total": 73000.0
+   },
+   "O-RF02-0020": {
+    "lines": [
+     {
+      "product_id": "P000512",
+      "quantity": 2,
+      "unit_price": 60200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 120400.0,
+     "status": "approved"
+    },
+    "total": 120400.0
+   },
+   "O-RF02-0021": {
+    "lines": [
+     {
+      "product_id": "P000407",
+      "quantity": 1,
+      "unit_price": 123500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000484",
+      "quantity": 2,
+      "unit_price": 35700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000803",
+      "quantity": 1,
+      "unit_price": 105100.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 300000.0,
+     "status": "approved"
+    },
+    "total": 300000.0
+   },
+   "O-RF02-0022": {
+    "lines": [
+     {
+      "product_id": "P000547",
+      "quantity": 1,
+      "unit_price": 203500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000967",
+      "quantity": 3,
+      "unit_price": 67400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 405700.0,
+     "status": "approved"
+    },
+    "total": 405700.0
+   },
+   "O-RF02-0023": {
+    "lines": [
+     {
+      "product_id": "P000154",
+      "quantity": 1,
+      "unit_price": 30100.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000041",
+      "quantity": 2,
+      "unit_price": 57300.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 144700.0,
+     "status": "approved"
+    },
+    "total": 144700.0
+   },
+   "O-RF02-0024": {
+    "lines": [
+     {
+      "product_id": "P000980",
+      "quantity": 2,
+      "unit_price": 81700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000742",
+      "quantity": 1,
+      "unit_price": 236400.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000345",
+      "quantity": 3,
+      "unit_price": 90200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 670400.0,
+     "status": "approved"
+    },
+    "total": 670400.0
+   },
+   "O-RF02-0025": {
+    "lines": [
+     {
+      "product_id": "P000342",
+      "quantity": 3,
+      "unit_price": 70500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000728",
+      "quantity": 1,
+      "unit_price": 122000.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 333500.0,
+     "status": "approved"
+    },
+    "total": 333500.0
+   },
+   "O-RF02-0026": {
+    "lines": [
+     {
+      "product_id": "P000355",
+      "quantity": 3,
+      "unit_price": 202900.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 608700.0,
+     "status": "approved"
+    },
+    "total": 608700.0
+   },
+   "O-RF02-0027": {
+    "lines": [
+     {
+      "product_id": "P000088",
+      "quantity": 1,
+      "unit_price": 97300.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000434",
+      "quantity": 3,
+      "unit_price": 71200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 310900.0,
+     "status": "approved"
+    },
+    "total": 310900.0
+   },
+   "O-RF02-0028": {
+    "lines": [
+     {
+      "product_id": "P000103",
+      "quantity": 3,
+      "unit_price": 83700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000661",
+      "quantity": 3,
+      "unit_price": 252900.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000887",
+      "quantity": 2,
+      "unit_price": 118700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 1247200.0,
+     "status": "approved"
+    },
+    "total": 1247200.0
+   },
+   "O-RF02-0029": {
+    "lines": [
+     {
+      "product_id": "P000033",
+      "quantity": 1,
+      "unit_price": 817100.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 817100.0,
+     "status": "approved"
+    },
+    "total": 817100.0
+   },
+   "O-RF02-0030": {
+    "lines": [
+     {
+      "product_id": "P000390",
+      "quantity": 2,
+      "unit_price": 107100.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000978",
+      "quantity": 3,
+      "unit_price": 183300.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000441",
+      "quantity": 2,
+      "unit_price": 119000.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 1002100.0,
+     "status": "approved"
+    },
+    "total": 1002100.0
+   },
+   "O-RF02-0031": {
+    "lines": [
+     {
+      "product_id": "P000656",
+      "quantity": 2,
+      "unit_price": 668400.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000311",
+      "quantity": 3,
+      "unit_price": 254700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000646",
+      "quantity": 1,
+      "unit_price": 119700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 2220600.0,
+     "status": "approved"
+    },
+    "total": 2220600.0
+   },
+   "O-RF02-0032": {
+    "lines": [
+     {
+      "product_id": "P000232",
+      "quantity": 1,
+      "unit_price": 90500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000821",
+      "quantity": 1,
+      "unit_price": 125700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000266",
+      "quantity": 2,
+      "unit_price": 33300.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 282800.0,
+     "status": "approved"
+    },
+    "total": 282800.0
+   },
+   "O-RF02-0033": {
+    "lines": [
+     {
+      "product_id": "P000927",
+      "quantity": 3,
+      "unit_price": 68700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000268",
+      "quantity": 3,
+      "unit_price": 45700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000087",
+      "quantity": 3,
+      "unit_price": 63700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 534300.0,
+     "status": "approved"
+    },
+    "total": 534300.0
+   },
+   "O-RF02-0034": {
+    "lines": [
+     {
+      "product_id": "P000835",
+      "quantity": 2,
+      "unit_price": 95600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000549",
+      "quantity": 2,
+      "unit_price": 150000.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 491200.0,
+     "status": "approved"
+    },
+    "total": 491200.0
+   },
+   "O-RF02-0035": {
+    "lines": [
+     {
+      "product_id": "P000790",
+      "quantity": 1,
+      "unit_price": 231600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000457",
+      "quantity": 3,
+      "unit_price": 161000.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000634",
+      "quantity": 2,
+      "unit_price": 428200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 1571000.0,
+     "status": "approved"
+    },
+    "total": 1571000.0
+   },
+   "O-RF02-0036": {
+    "lines": [
+     {
+      "product_id": "P000232",
+      "quantity": 1,
+      "unit_price": 90500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000487",
+      "quantity": 2,
+      "unit_price": 61100.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 212700.0,
+     "status": "approved"
+    },
+    "total": 212700.0
+   },
+   "O-RF02-0037": {
+    "lines": [
+     {
+      "product_id": "P000852",
+      "quantity": 1,
+      "unit_price": 532500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000090",
+      "quantity": 3,
+      "unit_price": 125900.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000239",
+      "quantity": 1,
+      "unit_price": 70800.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 981000.0,
+     "status": "approved"
+    },
+    "total": 981000.0
+   },
+   "O-RF02-0038": {
+    "lines": [
+     {
+      "product_id": "P000358",
+      "quantity": 2,
+      "unit_price": 46900.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 93800.0,
+     "status": "approved"
+    },
+    "total": 93800.0
+   },
+   "O-RF02-0039": {
+    "lines": [
+     {
+      "product_id": "P000268",
+      "quantity": 1,
+      "unit_price": 45700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000807",
+      "quantity": 1,
+      "unit_price": 75700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 121400.0,
+     "status": "approved"
+    },
+    "total": 121400.0
+   },
+   "O-RF02-0040": {
+    "lines": [
+     {
+      "product_id": "P000976",
+      "quantity": 2,
+      "unit_price": 42700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000787",
+      "quantity": 1,
+      "unit_price": 232300.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000717",
+      "quantity": 3,
+      "unit_price": 33200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 417300.0,
+     "status": "approved"
+    },
+    "total": 417300.0
+   },
+   "O-RF02-0041": {
+    "lines": [
+     {
+      "product_id": "P000219",
+      "quantity": 3,
+      "unit_price": 325100.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000089",
+      "quantity": 1,
+      "unit_price": 233100.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 1208400.0,
+     "status": "approved"
+    },
+    "total": 1208400.0
+   },
+   "O-RF02-0042": {
+    "lines": [
+     {
+      "product_id": "P000133",
+      "quantity": 3,
+      "unit_price": 57400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 172200.0,
+     "status": "approved"
+    },
+    "total": 172200.0
+   },
+   "O-RF02-0043": {
+    "lines": [
+     {
+      "product_id": "P000328",
+      "quantity": 2,
+      "unit_price": 143000.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 286000.0,
+     "status": "approved"
+    },
+    "total": 286000.0
+   },
+   "O-RF02-0044": {
+    "lines": [
+     {
+      "product_id": "P000580",
+      "quantity": 2,
+      "unit_price": 160500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000930",
+      "quantity": 1,
+      "unit_price": 240500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000273",
+      "quantity": 3,
+      "unit_price": 205800.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 1178900.0,
+     "status": "approved"
+    },
+    "total": 1178900.0
+   },
+   "O-RF02-0045": {
+    "lines": [
+     {
+      "product_id": "P000990",
+      "quantity": 3,
+      "unit_price": 367700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000476",
+      "quantity": 1,
+      "unit_price": 151700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 1254800.0,
+     "status": "approved"
+    },
+    "total": 1254800.0
+   },
+   "O-RF02-0046": {
+    "lines": [
+     {
+      "product_id": "P000697",
+      "quantity": 2,
+      "unit_price": 271200.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000592",
+      "quantity": 1,
+      "unit_price": 117700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 660100.0,
+     "status": "approved"
+    },
+    "total": 660100.0
+   },
+   "O-RF02-0047": {
+    "lines": [
+     {
+      "product_id": "P000551",
+      "quantity": 2,
+      "unit_price": 487800.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000797",
+      "quantity": 2,
+      "unit_price": 100400.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000106",
+      "quantity": 3,
+      "unit_price": 120400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 1537600.0,
+     "status": "approved"
+    },
+    "total": 1537600.0
+   },
+   "O-RF02-0048": {
+    "lines": [
+     {
+      "product_id": "P000562",
+      "quantity": 3,
+      "unit_price": 343100.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 1029300.0,
+     "status": "approved"
+    },
+    "total": 1029300.0
+   },
+   "O-RF02-0049": {
+    "lines": [
+     {
+      "product_id": "P000439",
+      "quantity": 1,
+      "unit_price": 16800.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 16800.0,
+     "status": "approved"
+    },
+    "total": 16800.0
+   },
+   "O-RF02-0050": {
+    "lines": [
+     {
+      "product_id": "P000809",
+      "quantity": 1,
+      "unit_price": 45600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000417",
+      "quantity": 1,
+      "unit_price": 218200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 263800.0,
+     "status": "approved"
+    },
+    "total": 263800.0
+   },
+   "O-RF02-0051": {
+    "lines": [
+     {
+      "product_id": "P000470",
+      "quantity": 3,
+      "unit_price": 84300.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000130",
+      "quantity": 1,
+      "unit_price": 121500.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 374400.0,
+     "status": "approved"
+    },
+    "total": 374400.0
+   },
+   "O-RF02-0052": {
+    "lines": [
+     {
+      "product_id": "P000328",
+      "quantity": 1,
+      "unit_price": 143000.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000601",
+      "quantity": 3,
+      "unit_price": 131000.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000317",
+      "quantity": 3,
+      "unit_price": 63800.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 727400.0,
+     "status": "approved"
+    },
+    "total": 727400.0
+   },
+   "O-RF02-0053": {
+    "lines": [
+     {
+      "product_id": "P000228",
+      "quantity": 1,
+      "unit_price": 227200.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000020",
+      "quantity": 1,
+      "unit_price": 744500.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 971700.0,
+     "status": "approved"
+    },
+    "total": 971700.0
+   },
+   "O-RF02-0054": {
+    "lines": [
+     {
+      "product_id": "P000462",
+      "quantity": 2,
+      "unit_price": 375600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000473",
+      "quantity": 1,
+      "unit_price": 135900.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000358",
+      "quantity": 2,
+      "unit_price": 46900.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 980900.0,
+     "status": "approved"
+    },
+    "total": 980900.0
+   },
+   "O-RF02-0055": {
+    "lines": [
+     {
+      "product_id": "P000821",
+      "quantity": 1,
+      "unit_price": 125700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 125700.0,
+     "status": "approved"
+    },
+    "total": 125700.0
+   },
+   "O-RF02-0056": {
+    "lines": [
+     {
+      "product_id": "P000872",
+      "quantity": 2,
+      "unit_price": 151400.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000423",
+      "quantity": 1,
+      "unit_price": 46900.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000375",
+      "quantity": 3,
+      "unit_price": 200700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 951800.0,
+     "status": "approved"
+    },
+    "total": 951800.0
+   },
+   "O-RF02-0057": {
+    "lines": [
+     {
+      "product_id": "P000836",
+      "quantity": 1,
+      "unit_price": 83600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000718",
+      "quantity": 3,
+      "unit_price": 22700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 151700.0,
+     "status": "approved"
+    },
+    "total": 151700.0
+   },
+   "O-RF02-0058": {
+    "lines": [
+     {
+      "product_id": "P000658",
+      "quantity": 2,
+      "unit_price": 66800.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000543",
+      "quantity": 2,
+      "unit_price": 87100.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000963",
+      "quantity": 1,
+      "unit_price": 81200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 389000.0,
+     "status": "approved"
+    },
+    "total": 389000.0
+   },
+   "O-RF02-0059": {
+    "lines": [
+     {
+      "product_id": "P000094",
+      "quantity": 2,
+      "unit_price": 124000.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000282",
+      "quantity": 1,
+      "unit_price": 326800.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000927",
+      "quantity": 2,
+      "unit_price": 68700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 712200.0,
+     "status": "approved"
+    },
+    "total": 712200.0
+   },
+   "O-RF02-0060": {
+    "lines": [
+     {
+      "product_id": "P000977",
+      "quantity": 1,
+      "unit_price": 100500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000099",
+      "quantity": 3,
+      "unit_price": 96300.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 389400.0,
+     "status": "approved"
+    },
+    "total": 389400.0
+   },
+   "O-RF02-0061": {
+    "lines": [
+     {
+      "product_id": "P000953",
+      "quantity": 3,
+      "unit_price": 74200.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000562",
+      "quantity": 2,
+      "unit_price": 343100.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000228",
+      "quantity": 1,
+      "unit_price": 227200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 1136000.0,
+     "status": "approved"
+    },
+    "total": 1136000.0
+   },
+   "O-RF02-0062": {
+    "lines": [
+     {
+      "product_id": "P000547",
+      "quantity": 3,
+      "unit_price": 203500.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 610500.0,
+     "status": "approved"
+    },
+    "total": 610500.0
+   },
+   "O-RF02-0063": {
+    "lines": [
+     {
+      "product_id": "P000395",
+      "quantity": 1,
+      "unit_price": 81700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000610",
+      "quantity": 2,
+      "unit_price": 121400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 324500.0,
+     "status": "approved"
+    },
+    "total": 324500.0
+   },
+   "O-RF02-0064": {
+    "lines": [
+     {
+      "product_id": "P000407",
+      "quantity": 1,
+      "unit_price": 123500.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 123500.0,
+     "status": "approved"
+    },
+    "total": 123500.0
+   },
+   "O-RF02-0065": {
+    "lines": [
+     {
+      "product_id": "P000185",
+      "quantity": 2,
+      "unit_price": 518600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000082",
+      "quantity": 2,
+      "unit_price": 63600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000081",
+      "quantity": 1,
+      "unit_price": 98400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 1262800.0,
+     "status": "approved"
+    },
+    "total": 1262800.0
+   },
+   "O-RF02-0066": {
+    "lines": [
+     {
+      "product_id": "P000534",
+      "quantity": 3,
+      "unit_price": 66900.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000928",
+      "quantity": 1,
+      "unit_price": 150200.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000976",
+      "quantity": 1,
+      "unit_price": 42700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 393600.0,
+     "status": "approved"
+    },
+    "total": 393600.0
+   },
+   "O-RF02-0067": {
+    "lines": [
+     {
+      "product_id": "P000799",
+      "quantity": 1,
+      "unit_price": 94900.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000699",
+      "quantity": 3,
+      "unit_price": 227800.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000907",
+      "quantity": 2,
+      "unit_price": 31500.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 841300.0,
+     "status": "approved"
+    },
+    "total": 841300.0
+   },
+   "O-RF02-0068": {
+    "lines": [
+     {
+      "product_id": "P000587",
+      "quantity": 3,
+      "unit_price": 74400.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000030",
+      "quantity": 1,
+      "unit_price": 97900.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 321100.0,
+     "status": "approved"
+    },
+    "total": 321100.0
+   },
+   "O-RF02-0069": {
+    "lines": [
+     {
+      "product_id": "P000048",
+      "quantity": 2,
+      "unit_price": 147100.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000032",
+      "quantity": 2,
+      "unit_price": 171900.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000355",
+      "quantity": 1,
+      "unit_price": 202900.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 840900.0,
+     "status": "approved"
+    },
+    "total": 840900.0
+   },
+   "O-RF02-0070": {
+    "lines": [
+     {
+      "product_id": "P000726",
+      "quantity": 1,
+      "unit_price": 152100.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 152100.0,
+     "status": "approved"
+    },
+    "total": 152100.0
+   },
+   "O-RF02-0071": {
+    "lines": [
+     {
+      "product_id": "P000129",
+      "quantity": 1,
+      "unit_price": 165600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000207",
+      "quantity": 1,
+      "unit_price": 159200.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P001004",
+      "quantity": 1,
+      "unit_price": 114000.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 438800.0,
+     "status": "approved"
+    },
+    "total": 438800.0
+   },
+   "O-RF02-0072": {
+    "lines": [
+     {
+      "product_id": "P000468",
+      "quantity": 1,
+      "unit_price": 97900.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000043",
+      "quantity": 2,
+      "unit_price": 98500.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 294900.0,
+     "status": "approved"
+    },
+    "total": 294900.0
+   },
+   "O-RF02-0073": {
+    "lines": [
+     {
+      "product_id": "P000709",
+      "quantity": 2,
+      "unit_price": 299700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000149",
+      "quantity": 3,
+      "unit_price": 744000.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000872",
+      "quantity": 1,
+      "unit_price": 151400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 2982800.0,
+     "status": "approved"
+    },
+    "total": 2982800.0
+   },
+   "O-RF02-0074": {
+    "lines": [
+     {
+      "product_id": "P000159",
+      "quantity": 1,
+      "unit_price": 216600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000876",
+      "quantity": 1,
+      "unit_price": 154000.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000870",
+      "quantity": 3,
+      "unit_price": 121200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 734200.0,
+     "status": "approved"
+    },
+    "total": 734200.0
+   },
+   "O-RF02-0075": {
+    "lines": [
+     {
+      "product_id": "P000670",
+      "quantity": 2,
+      "unit_price": 147600.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 295200.0,
+     "status": "approved"
+    },
+    "total": 295200.0
+   },
+   "O-RF02-0076": {
+    "lines": [
+     {
+      "product_id": "P000207",
+      "quantity": 3,
+      "unit_price": 159200.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000501",
+      "quantity": 1,
+      "unit_price": 135600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000603",
+      "quantity": 2,
+      "unit_price": 116500.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 846200.0,
+     "status": "approved"
+    },
+    "total": 846200.0
+   },
+   "O-RF02-0077": {
+    "lines": [
+     {
+      "product_id": "P000929",
+      "quantity": 3,
+      "unit_price": 60200.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000552",
+      "quantity": 3,
+      "unit_price": 78100.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 414900.0,
+     "status": "approved"
+    },
+    "total": 414900.0
+   },
+   "O-RF02-0078": {
+    "lines": [
+     {
+      "product_id": "P000878",
+      "quantity": 2,
+      "unit_price": 190300.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000686",
+      "quantity": 2,
+      "unit_price": 99400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 579400.0,
+     "status": "approved"
+    },
+    "total": 579400.0
+   },
+   "O-RF02-0079": {
+    "lines": [
+     {
+      "product_id": "P000686",
+      "quantity": 1,
+      "unit_price": 99400.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000394",
+      "quantity": 3,
+      "unit_price": 120500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000807",
+      "quantity": 3,
+      "unit_price": 75700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 688000.0,
+     "status": "approved"
+    },
+    "total": 688000.0
+   },
+   "O-RF02-0080": {
+    "lines": [
+     {
+      "product_id": "P000724",
+      "quantity": 1,
+      "unit_price": 136800.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 136800.0,
+     "status": "approved"
+    },
+    "total": 136800.0
+   },
+   "O-RF02-0081": {
+    "lines": [
+     {
+      "product_id": "P001003",
+      "quantity": 1,
+      "unit_price": 89200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 89200.0,
+     "status": "approved"
+    },
+    "total": 89200.0
+   },
+   "O-RF02-0082": {
+    "lines": [
+     {
+      "product_id": "P000167",
+      "quantity": 2,
+      "unit_price": 36700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 73400.0,
+     "status": "approved"
+    },
+    "total": 73400.0
+   },
+   "O-RF02-0083": {
+    "lines": [
+     {
+      "product_id": "P000558",
+      "quantity": 2,
+      "unit_price": 62500.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 125000.0,
+     "status": "approved"
+    },
+    "total": 125000.0
+   },
+   "O-RF02-0084": {
+    "lines": [
+     {
+      "product_id": "P000341",
+      "quantity": 2,
+      "unit_price": 31900.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000666",
+      "quantity": 2,
+      "unit_price": 91700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000529",
+      "quantity": 1,
+      "unit_price": 111000.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 358200.0,
+     "status": "approved"
+    },
+    "total": 358200.0
+   },
+   "O-RF02-0085": {
+    "lines": [
+     {
+      "product_id": "P000494",
+      "quantity": 2,
+      "unit_price": 149400.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000079",
+      "quantity": 1,
+      "unit_price": 38900.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000979",
+      "quantity": 1,
+      "unit_price": 50400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 388100.0,
+     "status": "approved"
+    },
+    "total": 388100.0
+   },
+   "O-RF02-0086": {
+    "lines": [
+     {
+      "product_id": "P000192",
+      "quantity": 2,
+      "unit_price": 74800.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000907",
+      "quantity": 3,
+      "unit_price": 31500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000421",
+      "quantity": 3,
+      "unit_price": 102700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "nequi",
+     "amount": 552200.0,
+     "status": "approved"
+    },
+    "total": 552200.0
+   },
+   "O-RF02-0087": {
+    "lines": [
+     {
+      "product_id": "P000688",
+      "quantity": 1,
+      "unit_price": 53800.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000130",
+      "quantity": 3,
+      "unit_price": 121500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000749",
+      "quantity": 1,
+      "unit_price": 54000.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 472300.0,
+     "status": "approved"
+    },
+    "total": 472300.0
+   },
+   "O-RF02-0088": {
+    "lines": [
+     {
+      "product_id": "P000306",
+      "quantity": 1,
+      "unit_price": 60600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000047",
+      "quantity": 3,
+      "unit_price": 39400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 178800.0,
+     "status": "approved"
+    },
+    "total": 178800.0
+   },
+   "O-RF02-0089": {
+    "lines": [
+     {
+      "product_id": "P000360",
+      "quantity": 1,
+      "unit_price": 116600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000992",
+      "quantity": 2,
+      "unit_price": 292500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000214",
+      "quantity": 1,
+      "unit_price": 336400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 1038000.0,
+     "status": "approved"
+    },
+    "total": 1038000.0
+   },
+   "O-RF02-0090": {
+    "lines": [
+     {
+      "product_id": "P000860",
+      "quantity": 2,
+      "unit_price": 87300.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000104",
+      "quantity": 1,
+      "unit_price": 75500.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 250100.0,
+     "status": "approved"
+    },
+    "total": 250100.0
+   },
+   "O-RF02-0091": {
+    "lines": [
+     {
+      "product_id": "P000484",
+      "quantity": 2,
+      "unit_price": 35700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000960",
+      "quantity": 2,
+      "unit_price": 73600.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 218600.0,
+     "status": "approved"
+    },
+    "total": 218600.0
+   },
+   "O-RF02-0092": {
+    "lines": [
+     {
+      "product_id": "P000645",
+      "quantity": 1,
+      "unit_price": 44600.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 44600.0,
+     "status": "approved"
+    },
+    "total": 44600.0
+   },
+   "O-RF02-0093": {
+    "lines": [
+     {
+      "product_id": "P000479",
+      "quantity": 3,
+      "unit_price": 133600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000356",
+      "quantity": 2,
+      "unit_price": 376600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000985",
+      "quantity": 1,
+      "unit_price": 125400.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 1279400.0,
+     "status": "approved"
+    },
+    "total": 1279400.0
+   },
+   "O-RF02-0094": {
+    "lines": [
+     {
+      "product_id": "P000033",
+      "quantity": 3,
+      "unit_price": 817100.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 2451300.0,
+     "status": "approved"
+    },
+    "total": 2451300.0
+   },
+   "O-RF02-0095": {
+    "lines": [
+     {
+      "product_id": "P000895",
+      "quantity": 3,
+      "unit_price": 59800.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000287",
+      "quantity": 1,
+      "unit_price": 50100.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 229500.0,
+     "status": "approved"
+    },
+    "total": 229500.0
+   },
+   "O-RF02-0096": {
+    "lines": [
+     {
+      "product_id": "P001000",
+      "quantity": 3,
+      "unit_price": 234600.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000279",
+      "quantity": 1,
+      "unit_price": 40700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000529",
+      "quantity": 3,
+      "unit_price": 111000.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 1077500.0,
+     "status": "approved"
+    },
+    "total": 1077500.0
+   },
+   "O-RF02-0097": {
+    "lines": [
+     {
+      "product_id": "P000594",
+      "quantity": 1,
+      "unit_price": 58700.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000400",
+      "quantity": 1,
+      "unit_price": 413500.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000034",
+      "quantity": 3,
+      "unit_price": 55200.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "card",
+     "amount": 637800.0,
+     "status": "approved"
+    },
+    "total": 637800.0
+   },
+   "O-RF02-0098": {
+    "lines": [
+     {
+      "product_id": "P000202",
+      "quantity": 3,
+      "unit_price": 43400.0,
+      "discount": 0.0
+     },
+     {
+      "product_id": "P000311",
+      "quantity": 2,
+      "unit_price": 254700.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "pse",
+     "amount": 639600.0,
+     "status": "approved"
+    },
+    "total": 639600.0
+   },
+   "O-RF02-0099": {
+    "lines": [
+     {
+      "product_id": "P000169",
+      "quantity": 3,
+      "unit_price": 165800.0,
+      "discount": 0.0
+     }
+    ],
+    "payment": {
+     "method": "cash_on_delivery",
+     "amount": 497400.0,
+     "status": "approved"
+    },
+    "total": 497400.0
+   }
+  },
+  "status_change_event_ids": [
+   "0c62dc50-97dc-4e56-955a-6a3be01d588c",
+   "0cfdda3f-de77-4b98-98e9-b1cdb7d4b593",
+   "133e3f5e-fcd5-4dbc-92e0-79f747f96c6c",
+   "15b4e47e-ee94-4fbe-82ea-6c414954d4c8",
+   "3ac4ecdf-b1de-44b1-94e9-a1adb1cae630",
+   "46fbc331-e820-48f5-9df6-033f0f68e2df",
+   "47be03c2-7156-4dec-887b-ad5ab0987554",
+   "4d94209f-f0f3-438d-be81-dd10515c0d51",
+   "519557af-6d15-4b44-a3e0-b865b9cb00e8",
+   "601e5c12-2664-4c37-84cb-c87f3f3db930",
+   "619d93ca-27dd-495f-bc1e-11df3804f2e2",
+   "6433df91-20f4-40f6-b991-20dacd929d2e",
+   "8d2c2894-6c68-4e2c-bd5d-2f3ade43694c",
+   "b1caf65c-9d66-47c5-9abf-1d6dbae0d92c",
+   "b539cf73-f01f-48c5-83df-9c7db2b31e11",
+   "bbbda43c-fde0-4774-8f8a-866b8046fa19",
+   "cdf675d0-6a73-422d-b4ae-7bf3b7f870a6",
+   "d805e048-d3de-49a7-b351-763c3cbbd44c",
+   "d959070e-5dcc-4d87-87a7-1edc143df827",
+   "f2f03f84-c2b8-4f2c-b46c-ce3b571fe03c"
+  ]
+ }
+}

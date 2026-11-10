@@ -1,0 +1,7 @@
+{
+  "checked_at": "2026-11-10T04:51:47.228925+00:00",
+  "ok": true,
+  "result": "[PASA ] RF-01 Bronze conserva los eventos sin modificar: {\"esperados\": 10000, \"en_bronze\": 10000, \"faltan\": [], \"distintos\": []}",
+  "scenario_t0": "2026-11-10T04:51:24.569Z",
+  "bronze_rows_since_start": 10000
+}

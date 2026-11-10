@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-11-10T04:50:29.297923+00:00",
+  "ok": true,
+  "failed_run": "rf12-fail-20261110T044615",
+  "failure_states": {
+    "validate_masters": "failed",
+    "validate_silver": "upstream_failed",
+    "run_gold": "upstream_failed",
+    "register_catalog": "upstream_failed"
+  },
+  "recovered_run": "rf12-recovered-20261110T044615",
+  "recovery_states": {
+    "validate_masters": "success",
+    "validate_silver": "success",
+    "run_gold": "success",
+    "register_catalog": "success"
+  },
+  "master_key": "landing/masters/products/dt=2026-11-09/products.csv",
+  "original_version": "hoE7TtLYlmoC0jci_odOaxOG6UzYhYQF",
+  "failure_email_received_confirmed_by_user": true
+}

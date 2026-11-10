@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tiendacol/orders/1.0",
+  "title": "Evento de orden (captura de la base transaccional)",
+  "description": "PROPUESTA de P1 para la Fase 0. Clave de partición: order_id. order_created lleva líneas y pago; order_status_changed lleva el nuevo estado de envío.",
+  "type": "object",
+  "required": ["event_id", "event_type", "event_ts", "schema_version", "order_id"],
+  "properties": {
+    "event_id": {"type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"},
+    "event_type": {"enum": ["order_created", "order_status_changed"]},
+    "event_ts": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"},
+    "schema_version": {"const": "1.0"},
+    "order_id": {"type": "string"},
+    "user_id": {"type": ["string", "null"]},
+    "city": {"type": "string"},
+    "department": {"type": "string"},
+    "status": {"enum": ["paid", "packed", "shipped", "delivered", "cancelled"]},
+    "previous_status": {"enum": ["paid", "packed", "shipped", "delivered", "cancelled", null]},
+    "lines": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["product_id", "quantity", "unit_price", "discount"],
+        "properties": {
+          "product_id": {"type": "string"},
+          "quantity": {"type": "integer", "minimum": 1},
+          "unit_price": {"type": "number", "minimum": 0},
+          "discount": {"type": "number", "minimum": 0}
+        }
+      }
+    },
+    "payment": {
+      "type": "object",
+      "required": ["method", "amount", "status"],
+      "properties": {
+        "method": {"enum": ["card", "pse", "nequi", "cash_on_delivery"]},
+        "amount": {"type": "number", "minimum": 0},
+        "status": {"enum": ["approved", "pending", "rejected"]}
+      }
+    },
+    "total": {"type": "number", "minimum": 0}
+  },
+  "allOf": [
+    {"if": {"properties": {"event_type": {"const": "order_created"}}},
+     "then": {"required": ["lines", "payment", "total", "status", "city", "department"]}},
+    {"if": {"properties": {"event_type": {"const": "order_status_changed"}}},
+     "then": {"required": ["status", "previous_status"]}}
+  ]
+}

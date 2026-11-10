@@ -9,7 +9,12 @@ credentials
 __pycache__/
 *.pyc
 .venv/
+.venv-python/
+.venv-cache/
+.venv-linux/
+.lab2b/
 venv/
+hadoop/
 
 # Notebooks
 .ipynb_checkpoints/
@@ -28,3 +33,4 @@ data/local/
 labs/lab1b-batch/datos/data_quality_report.md
 labs/lab1b-batch/ejemplos/
 labs/lab2a-kafka/ejemplos/
+labs/lab2b-kinesis/ejemplos/

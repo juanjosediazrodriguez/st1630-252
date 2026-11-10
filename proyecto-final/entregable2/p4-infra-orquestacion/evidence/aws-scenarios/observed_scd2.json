@@ -1,0 +1,41 @@
+{
+  "checked_at": "2026-11-10T04:55:04.349825+00:00",
+  "ok": true,
+  "snapshot_day": "2026-11-10",
+  "files_uploaded": 5,
+  "gold_run": "scd2-20261110T045105",
+  "gold_tasks": {
+    "validate_masters": "success",
+    "validate_silver": "success",
+    "run_gold": "success",
+    "register_catalog": "success"
+  },
+  "products_with_history": 25,
+  "sample": [
+    [
+      "P000301",
+      "2",
+      "1"
+    ],
+    [
+      "P000723",
+      "2",
+      "1"
+    ],
+    [
+      "P000992",
+      "2",
+      "1"
+    ],
+    [
+      "P000638",
+      "2",
+      "1"
+    ],
+    [
+      "P000844",
+      "2",
+      "1"
+    ]
+  ]
+}

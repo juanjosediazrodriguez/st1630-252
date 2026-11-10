@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-11-10T05:55:02.556467+00:00",
+  "stack_status": "UPDATE_COMPLETE",
+  "alarms": {
+    "tiendacol-e2-AlertsDlqAlarm-h04yscJ4nkOd": {
+      "metric": "ApproximateNumberOfMessagesVisible",
+      "state": "OK",
+      "threshold": 0.0,
+      "actions": 1
+    },
+    "tiendacol-e2-CartsDlqAlarm-zfWxr6mPMOdD": {
+      "metric": "ApproximateNumberOfMessagesVisible",
+      "state": "OK",
+      "threshold": 0.0,
+      "actions": 1
+    },
+    "tiendacol-e2-IteratorAgeAlarm-7crG85Kbuzc2": {
+      "metric": "GetRecords.IteratorAgeMilliseconds",
+      "state": "OK",
+      "threshold": 120000.0,
+      "actions": 1
+    }
+  },
+  "glue_failure_rule": "ENABLED",
+  "sns_confirmed": true,
+  "monthly_budget_usd": "25.0",
+  "ok": true
+}

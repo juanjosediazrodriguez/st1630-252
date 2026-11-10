@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-11-10T04:20:41.042216+00:00",
+  "ok": true,
+  "result": "[PASA ] RF-07 alerta de agotamiento: {\"latencia_s\": 37.8, \"maximo_s\": 120, \"alertas_duplicadas\": 0}",
+  "alerts": [
+    {
+      "product_id": "TEST-RF07",
+      "alert_id": "TEST-RF07|2026-11-10T04:19:00.000Z",
+      "received_at": "2026-11-10T04:19:22.000Z"
+    }
+  ],
+  "email_received_confirmed_by_user": true
+}

@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "result": "[PASA ] RF-04 maestros cargados: {\"dia\": \"2026-11-10\", \"discrepancias\": {}}",
+  "deadline": "[PASA ] RF-04 carga antes de las 06:00 COT: {\"cargado\": \"2026-11-10T04:51:06+00:00\", \"limite\": \"2026-11-10T11:00:00+00:00\"}",
+  "day": "2026-11-10",
+  "counts": {
+    "products": 1015,
+    "customers": 2014,
+    "sellers": 150,
+    "inventory": 2024
+  }
+}

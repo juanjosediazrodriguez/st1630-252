@@ -1,0 +1,15 @@
+{
+ "scenario": "rf07",
+ "t0": "2026-11-10T04:05:56.159Z",
+ "sent": 150,
+ "expected": {
+  "product_id": "TEST-RF07",
+  "initial_stock": 320,
+  "sales": 75,
+  "trigger_index": 64,
+  "max_latency_s": 120,
+  "trigger_event_id": "6287609e-2628-4dbf-9658-98a88d8bd957",
+  "trigger_ts": "2026-11-10T04:18:44.159Z",
+  "stock_at_trigger": 255
+ }
+}

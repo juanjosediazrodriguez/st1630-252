@@ -1,0 +1,10 @@
+{
+  "checked_at": "2026-11-10T04:56:02.217273+00:00",
+  "ok": true,
+  "result": "[PASA ] RNF-03 0 perdidos y 0 duplicados: {\"bronze\": \"10100 (esperado 10100)\", \"silver\": \"10000 (esperado 10000)\", \"silver_ids_unicos\": 10000}",
+  "scenario_t0": "2026-11-10T04:55:04.637Z",
+  "scenario_seed": 1006,
+  "masters_day_index": 1,
+  "bronze_expected_rows": 10100,
+  "silver_expected_rows": 10000
+}

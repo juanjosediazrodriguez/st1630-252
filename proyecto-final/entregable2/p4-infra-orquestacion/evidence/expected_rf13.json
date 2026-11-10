@@ -1,0 +1,31 @@
+{
+ "scenario": "rf13",
+ "t0": "2026-11-10T03:13:16.746Z",
+ "sent": 300,
+ "expected": {
+  "top_bought_together": {
+   "product": "TEST-RF13-A",
+   "first": "TEST-RF13-B",
+   "first_count": 50,
+   "others": {
+    "P000001": 10,
+    "P000002": 10,
+    "P000003": 10,
+    "P000004": 10,
+    "P000005": 10
+   }
+  },
+  "top_viewed_together": {
+   "product": "TEST-RF13-A",
+   "first": "TEST-RF13-B",
+   "first_count": 50,
+   "others": {
+    "P000001": 10,
+    "P000002": 10,
+    "P000003": 10,
+    "P000004": 10,
+    "P000005": 10
+   }
+  }
+ }
+}

@@ -1,0 +1,26 @@
+{
+  "checked_at": "2026-11-10T04:29:23.308337+00:00",
+  "ok": true,
+  "result": "[PASA ] RF-09 ventas por minuto: {\"problemas\": {}, \"segundos_sobre_el_limite\": -96.7}",
+  "rows": [
+    {
+      "minute_start": "2026-11-10T04:28:00.000 UTC",
+      "category_id": "1",
+      "orders": "12",
+      "value": "1200000.0"
+    },
+    {
+      "minute_start": "2026-11-10T04:28:00.000 UTC",
+      "category_id": "3",
+      "orders": "8",
+      "value": "400000.0"
+    },
+    {
+      "minute_start": "2026-11-10T04:28:00.000 UTC",
+      "category_id": null,
+      "orders": "20",
+      "value": "1600000.0"
+    }
+  ],
+  "first_seen": "2026-11-10 04:29:23.306868+00:00"
+}
