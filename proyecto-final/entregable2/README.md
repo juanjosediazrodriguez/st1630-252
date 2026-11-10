@@ -109,3 +109,24 @@ proyecto-final/entregable2/
 ├── p3-gold-batch/             ← Glue Batch, SCD2, fact tables y Athena (Juan José Díaz)
 └── p4-infra-orquestacion/     ← CloudFormation, Lambdas, Airflow y DynamoDB (Daniel Arcila)
 ```
+
+---
+
+## 7. Despliegue y demo en AWS
+
+P4 implementó el stack y los DAGs en [`p4-infra-orquestacion/`](p4-infra-orquestacion/README.md). El despliegue reproduce S3, Kinesis, Glue Streaming y Batch, SQS con DLQ, SNS, DynamoDB, IAM, Athena, CloudWatch, Budgets y una EC2 dedicada a Airflow.
+
+```powershell
+# Desde proyecto-final; requiere entregable2/.env completo y cuenta AWS Paid con créditos.
+python entregable2/p4-infra-orquestacion/deploy.py
+python entregable2/p4-infra-orquestacion/verify.py --ssm
+```
+
+Confirmar el correo de SNS. En Airflow, ejecutar `tiendacol_bootstrap` para cargar maestros y arrancar Glue Streaming. Después de que el job esté en `RUNNING`, enviar eventos con P1 usando los mismos parámetros que los maestros del DAG:
+
+```powershell
+python entregable2/p4-infra-orquestacion/run_generator.py run --sink kinesis --stream tiendacol-events --region us-east-1 --seed 1630 --products 1000 --customers 2000 --rate 20 --duration 30
+python entregable2/p4-infra-orquestacion/run_generator.py scenario rf13 --sink kinesis --stream tiendacol-events --region us-east-1 --seed 1630 --products 1000 --customers 2000 --fast
+```
+
+El DAG `tiendacol_gold_hourly` ejecuta Glue Batch y registra las tablas Delta en Athena. Para terminar la sesión, ejecutar `tiendacol_stop_demo` y detener la EC2 si no se seguirá usando Airflow. Ver el [manual de P4](p4-infra-orquestacion/README.md) para las salidas del stack, la consulta SQL, control de costos y la desviación de cifrado KMS observada en la cuenta nueva.

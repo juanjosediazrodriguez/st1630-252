@@ -1,0 +1,26 @@
+{
+  "steps": [
+    {
+      "target_rate": 20,
+      "seconds": 30.0,
+      "emitted": 598,
+      "achieved_rate": 19.9,
+      "sustained": true
+    }
+  ],
+  "stats": {
+    "emitidos": 598,
+    "logicos": 587,
+    "duplicados": 7,
+    "tardios": 3,
+    "malformados": 6,
+    "por_stream": {
+      "clickstream": 598,
+      "orders": 0,
+      "stock_changes": 0
+    }
+  },
+  "sink": {
+    "ok": 598
+  }
+}

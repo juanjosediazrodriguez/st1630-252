@@ -6,6 +6,7 @@ import logging
 import re
 
 import pandas as pd
+import numpy as np
 
 from .config import GoldConfig
 from .dimensions import apply_scd2_products_df
@@ -21,6 +22,26 @@ from .tables import (
 
 log = logging.getLogger(__name__)
 _MANIFEST_RE = re.compile(r"_manifest_dt=(\d{4}-\d{2}-\d{2})\.json$")
+
+
+def _spark_record(record: dict) -> dict:
+    """Pandas vuelve a convertir datetime de Python en Timestamp al crear el DataFrame.
+
+    PySpark con esquema explícito acepta datetime/date/escalares nativos, no Timestamp/NaT
+    ni varios escalares numpy. Normalizar justo antes de createDataFrame evita el fallo.
+    """
+    out = {}
+    for key, value in record.items():
+        if value is None or value is pd.NaT:
+            value = None
+        elif isinstance(value, pd.Timestamp):
+            value = value.to_pydatetime()
+        elif isinstance(value, np.generic):
+            value = value.item()
+        if isinstance(value, float) and pd.isna(value):
+            value = None
+        out[key] = value
+    return out
 
 
 def _load_spark_masters_snapshots(spark, masters_root: str) -> list[tuple[str, dict]]:
@@ -77,7 +98,7 @@ def run_job(cfg: GoldConfig, spark) -> dict[str, int]:
     4. Construye dimensiones (`dim_product`, `dim_seller`, `dim_customer`, `dim_location`,
        `dim_device`, `dim_datetime`), tablas de hechos (`fact_sales`, `fact_funnel_event`)
        y afinidad (`agg_product_affinity`).
-    5. Hace `MERGE INTO delta.\`ruta\`` idempotente sobre cada tabla de Gold.
+    5. Hace MERGE INTO por ruta Delta, de forma idempotente, sobre cada tabla de Gold.
     """
     created = ensure_gold_tables(spark, cfg)
     if created:
@@ -158,7 +179,7 @@ def run_job(cfg: GoldConfig, spark) -> dict[str, int]:
         counts[name] = len(pdf)
         if pdf.empty:
             continue
-        sdf = spark.createDataFrame(pdf.to_dict("records"), schema=schema)
+        sdf = spark.createDataFrame([_spark_record(r) for r in pdf.to_dict("records")], schema=schema)
         on_expr, upd = merge_keys[name]
         merge_delta_sql(
             spark,

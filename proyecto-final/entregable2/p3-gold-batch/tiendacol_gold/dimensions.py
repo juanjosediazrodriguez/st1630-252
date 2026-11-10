@@ -206,7 +206,7 @@ def build_dim_datetime_df(timestamps: list[str]) -> pd.DataFrame:
         minute = int(norm[14:16])
         rows.append({
             "datetime_key": norm,
-            "minute_ts": pd.to_datetime(f"{norm}:00Z", utc=True),
+            "minute_ts": pd.to_datetime(f"{norm}:00Z", utc=True).to_pydatetime(),
             "date": dt_part,
             "hour": hr_part,
             "year": year,

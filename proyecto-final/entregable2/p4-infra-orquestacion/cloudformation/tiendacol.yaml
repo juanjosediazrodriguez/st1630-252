@@ -1,0 +1,508 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: TiendaCol E2 - data plane, notifications, Glue jobs and optional Airflow EC2
+Parameters:
+  Prefix:
+    Type: String
+    Default: tiendacol
+    AllowedPattern: '[a-z][a-z0-9-]{2,20}'
+  AlertEmail:
+    Type: String
+  BudgetEmail:
+    Type: String
+  MonthlyBudgetUsd:
+    Type: Number
+    Default: 25
+    MinValue: 1
+  EnableApplications:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+  EnableAirflow:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+  AirflowSubnetId:
+    Type: String
+    Default: ''
+  AirflowVpcId:
+    Type: String
+    Default: ''
+Conditions:
+  Applications: !Equals [!Ref EnableApplications, 'true']
+  Airflow: !Equals [!Ref EnableAirflow, 'true']
+Resources:
+  LakeBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      VersioningConfiguration: {Status: Enabled}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: {SSEAlgorithm: aws:kms, KMSMasterKeyID: alias/aws/s3}
+      LifecycleConfiguration:
+        Rules:
+          - Id: AbortIncompleteUploads
+            Status: Enabled
+            AbortIncompleteMultipartUpload: {DaysAfterInitiation: 7}
+  OpsBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      VersioningConfiguration: {Status: Enabled}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: {SSEAlgorithm: aws:kms, KMSMasterKeyID: alias/aws/s3}
+      LifecycleConfiguration:
+        Rules:
+          - Id: AbortIncompleteUploads
+            Status: Enabled
+            AbortIncompleteMultipartUpload: {DaysAfterInitiation: 7}
+  EventsStream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      Name: !Sub '${Prefix}-events'
+      ShardCount: 1
+      RetentionPeriodHours: 24
+      StreamEncryption: {EncryptionType: KMS, KeyId: alias/aws/kinesis}
+  AlertsDlq:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub '${Prefix}-alertas-dlq'
+      MessageRetentionPeriod: 1209600
+      SqsManagedSseEnabled: true
+  CartsDlq:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub '${Prefix}-carritos-dlq'
+      MessageRetentionPeriod: 1209600
+      SqsManagedSseEnabled: true
+  AlertsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub '${Prefix}-alertas'
+      VisibilityTimeout: 90
+      MessageRetentionPeriod: 3600
+      SqsManagedSseEnabled: true
+      RedrivePolicy: {deadLetterTargetArn: !GetAtt AlertsDlq.Arn, maxReceiveCount: 3}
+  CartsQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub '${Prefix}-carritos'
+      VisibilityTimeout: 90
+      MessageRetentionPeriod: 3600
+      SqsManagedSseEnabled: true
+      RedrivePolicy: {deadLetterTargetArn: !GetAtt CartsDlq.Arn, maxReceiveCount: 3}
+  AlertsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub '${Prefix}-alertas'
+  AlertsSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref AlertsTopic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+  CartsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${Prefix}-carritos-abandonados'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: user_id, AttributeType: S}
+        - {AttributeName: abandoned_date, AttributeType: S}
+        - {AttributeName: cart_value, AttributeType: N}
+      KeySchema:
+        - {AttributeName: user_id, KeyType: HASH}
+      GlobalSecondaryIndexes:
+        - IndexName: date-value-index
+          KeySchema:
+            - {AttributeName: abandoned_date, KeyType: HASH}
+            - {AttributeName: cart_value, KeyType: RANGE}
+          Projection: {ProjectionType: ALL}
+      SSESpecification: {SSEEnabled: true}
+  AlertDedupeTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${Prefix}-alert-dedupe'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: alert_id, AttributeType: S}
+      KeySchema:
+        - {AttributeName: alert_id, KeyType: HASH}
+      TimeToLiveSpecification: {AttributeName: expires_at, Enabled: true}
+      SSESpecification: {SSEEnabled: true}
+  GlueRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: glue.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+      Policies:
+        - PolicyName: TiendaColData
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [s3:ListBucket, s3:GetBucketLocation]
+                Resource: [!GetAtt LakeBucket.Arn, !GetAtt OpsBucket.Arn]
+              - Effect: Allow
+                Action: [s3:GetObject, s3:PutObject, s3:DeleteObject]
+                Resource: [!Sub '${LakeBucket.Arn}/*', !Sub '${OpsBucket.Arn}/*']
+              - Effect: Allow
+                Action: [kinesis:DescribeStream, kinesis:DescribeStreamSummary, kinesis:ListShards, kinesis:GetShardIterator, kinesis:GetRecords, kinesis:SubscribeToShard]
+                Resource: !GetAtt EventsStream.Arn
+              - Effect: Allow
+                Action: [sqs:SendMessage, sqs:GetQueueAttributes, sqs:GetQueueUrl]
+                Resource: [!GetAtt AlertsQueue.Arn, !GetAtt CartsQueue.Arn]
+              - Effect: Allow
+                Action: [kms:Decrypt, kms:GenerateDataKey, kms:DescribeKey]
+                Resource: !Sub 'arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/*'
+                Condition:
+                  StringLike:
+                    'kms:ViaService':
+                      - !Sub 's3.${AWS::Region}.amazonaws.com'
+                      - !Sub 'kinesis.${AWS::Region}.amazonaws.com'
+  StreamingJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub '${Prefix}-streaming'
+      Role: !GetAtt GlueRole.Arn
+      GlueVersion: '4.0'
+      Command:
+        Name: gluestreaming
+        PythonVersion: '3'
+        ScriptLocation: !Sub 's3://${OpsBucket}/glue/tiendacol_streaming.py'
+      WorkerType: G.1X
+      NumberOfWorkers: 2
+      MaxRetries: 0
+      Timeout: 10080
+      DefaultArguments:
+        '--job-language': python
+        '--datalake-formats': delta
+        '--extra-py-files': !Sub 's3://${OpsBucket}/glue/tiendacol_stream.zip'
+        '--conf': 'spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension --conf spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog'
+        '--enable-metrics': 'true'
+        '--enable-continuous-cloudwatch-log': 'true'
+        '--enable-spark-ui': 'false'
+        '--lake_root': !Sub 's3://${LakeBucket}'
+        '--checkpoint_root': !Sub 's3://${OpsBucket}/checkpoints/tiendacol-streaming'
+        '--masters_root': !Sub 's3://${LakeBucket}/landing/masters'
+        '--source': kinesis
+        '--stream_name': !Ref EventsStream
+        '--region': !Ref AWS::Region
+        '--starting_position': TRIM_HORIZON
+        '--kinesis_format': kinesis
+        '--sqs_mode': aws
+        '--alerts_queue_url': !Ref AlertsQueue
+        '--carts_queue_url': !Ref CartsQueue
+        '--ingest_trigger_s': '30'
+        '--downstream_trigger_s': '10'
+        '--shuffle_partitions': '8'
+  GoldJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub '${Prefix}-gold-batch'
+      Role: !GetAtt GlueRole.Arn
+      GlueVersion: '4.0'
+      Command:
+        Name: glueetl
+        PythonVersion: '3'
+        ScriptLocation: !Sub 's3://${OpsBucket}/glue/tiendacol_gold_batch.py'
+      WorkerType: G.1X
+      NumberOfWorkers: 2
+      MaxRetries: 1
+      Timeout: 15
+      DefaultArguments:
+        '--job-language': python
+        '--datalake-formats': delta
+        '--extra-py-files': !Sub 's3://${OpsBucket}/glue/tiendacol_gold.zip'
+        '--conf': 'spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension --conf spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog'
+        '--enable-metrics': 'true'
+        '--enable-continuous-cloudwatch-log': 'true'
+        '--enable-spark-ui': 'false'
+        '--lake_root': !Sub 's3://${LakeBucket}'
+        '--masters_root': !Sub 's3://${LakeBucket}/landing/masters'
+        '--shuffle_partitions': '8'
+        '--write_files': '1'
+        '--top_affinity_k': '10'
+  CatalogDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput: {Name: tiendacol_gold}
+  LakeDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput: {Name: tiendacol_lake}
+  AthenaWorkGroup:
+    Type: AWS::Athena::WorkGroup
+    Properties:
+      Name: !Sub '${Prefix}-analytics'
+      State: ENABLED
+      WorkGroupConfiguration:
+        EnforceWorkGroupConfiguration: true
+        ResultConfiguration:
+          OutputLocation: !Sub 's3://${OpsBucket}/athena-results/'
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Condition: Applications
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: lambda.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: TiendaColConsumers
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [sqs:ReceiveMessage, sqs:DeleteMessage, sqs:GetQueueAttributes]
+                Resource: [!GetAtt AlertsQueue.Arn, !GetAtt CartsQueue.Arn]
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem]
+                Resource: [!GetAtt CartsTable.Arn, !GetAtt AlertDedupeTable.Arn]
+              - Effect: Allow
+                Action: [kms:Decrypt, kms:GenerateDataKey]
+                Resource: !Sub 'arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/*'
+                Condition: {StringEquals: {'kms:ViaService': !Sub 'dynamodb.${AWS::Region}.amazonaws.com'}}
+              - Effect: Allow
+                Action: [sns:Publish]
+                Resource: !Ref AlertsTopic
+  AlertsLambda:
+    Type: AWS::Lambda::Function
+    Condition: Applications
+    Properties:
+      FunctionName: !Sub '${Prefix}-consume-alertas'
+      Runtime: python3.12
+      Handler: handlers.alerts_handler
+      Role: !GetAtt LambdaRole.Arn
+      Timeout: 30
+      MemorySize: 128
+      Code: {S3Bucket: !Ref OpsBucket, S3Key: lambda/consumers.zip}
+      Environment:
+        Variables:
+          DEDUPE_TABLE: !Ref AlertDedupeTable
+          ALERTS_TOPIC_ARN: !Ref AlertsTopic
+  CartsLambda:
+    Type: AWS::Lambda::Function
+    Condition: Applications
+    Properties:
+      FunctionName: !Sub '${Prefix}-consume-carritos'
+      Runtime: python3.12
+      Handler: handlers.carts_handler
+      Role: !GetAtt LambdaRole.Arn
+      Timeout: 30
+      MemorySize: 128
+      Code: {S3Bucket: !Ref OpsBucket, S3Key: lambda/consumers.zip}
+      Environment:
+        Variables:
+          CARTS_TABLE: !Ref CartsTable
+  AlertsMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Condition: Applications
+    Properties:
+      EventSourceArn: !GetAtt AlertsQueue.Arn
+      FunctionName: !Ref AlertsLambda
+      BatchSize: 10
+      FunctionResponseTypes: [ReportBatchItemFailures]
+      Enabled: true
+  CartsMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Condition: Applications
+    Properties:
+      EventSourceArn: !GetAtt CartsQueue.Arn
+      FunctionName: !Ref CartsLambda
+      BatchSize: 10
+      FunctionResponseTypes: [ReportBatchItemFailures]
+      Enabled: true
+  Budget:
+    Type: AWS::Budgets::Budget
+    Properties:
+      Budget:
+        BudgetName: !Sub '${Prefix}-monthly'
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit: {Amount: !Ref MonthlyBudgetUsd, Unit: USD}
+      NotificationsWithSubscribers:
+        - Notification: {NotificationType: ACTUAL, ComparisonOperator: GREATER_THAN, Threshold: 50}
+          Subscribers: [{SubscriptionType: EMAIL, Address: !Ref BudgetEmail}]
+        - Notification: {NotificationType: ACTUAL, ComparisonOperator: GREATER_THAN, Threshold: 80}
+          Subscribers: [{SubscriptionType: EMAIL, Address: !Ref BudgetEmail}]
+  AlertsDlqAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Mensajes fallidos en cola de alertas
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions: [{Name: QueueName, Value: !GetAtt AlertsDlq.QueueName}]
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions: [!Ref AlertsTopic]
+      TreatMissingData: notBreaching
+  CartsDlqAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Mensajes fallidos en cola de carritos
+      Namespace: AWS/SQS
+      MetricName: ApproximateNumberOfMessagesVisible
+      Dimensions: [{Name: QueueName, Value: !GetAtt CartsDlq.QueueName}]
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 0
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions: [!Ref AlertsTopic]
+      TreatMissingData: notBreaching
+  AirflowRole:
+    Type: AWS::IAM::Role
+    Condition: Airflow
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: {Service: ec2.amazonaws.com}
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Policies:
+        - PolicyName: TiendaColControl
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [glue:StartJobRun, glue:GetJobRun, glue:GetJobRuns, glue:BatchStopJobRun, glue:GetJob]
+                Resource: [!Sub 'arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:job/${Prefix}-streaming', !Sub 'arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:job/${Prefix}-gold-batch']
+              - Effect: Allow
+                Action: [s3:ListBucket, s3:GetBucketLocation]
+                Resource: [!GetAtt LakeBucket.Arn, !GetAtt OpsBucket.Arn]
+              - Effect: Allow
+                Action: [s3:GetObject]
+                Resource: [!Sub '${LakeBucket.Arn}/*', !Sub '${OpsBucket.Arn}/airflow/*', !Sub '${OpsBucket.Arn}/athena-results/*']
+              - Effect: Allow
+                Action: [s3:PutObject]
+                Resource: [!Sub '${LakeBucket.Arn}/landing/masters/*', !Sub '${OpsBucket.Arn}/athena-results/*']
+              - Effect: Allow
+                Action: [kms:Decrypt, kms:GenerateDataKey]
+                Resource: !Sub 'arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/*'
+                Condition: {StringEquals: {'kms:ViaService': !Sub 's3.${AWS::Region}.amazonaws.com'}}
+              - Effect: Allow
+                Action: [athena:StartQueryExecution, athena:GetQueryExecution, athena:GetQueryResults]
+                Resource: !Sub 'arn:${AWS::Partition}:athena:${AWS::Region}:${AWS::AccountId}:workgroup/${Prefix}-analytics'
+              - Effect: Allow
+                Action: [glue:GetDatabase, glue:GetDatabases, glue:CreateDatabase, glue:GetTable, glue:GetPartitions, glue:CreateTable, glue:UpdateTable, glue:BatchCreatePartition]
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:catalog'
+                  - !Sub 'arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:database/tiendacol_*'
+                  - !Sub 'arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:table/tiendacol_*/*'
+              - Effect: Allow
+                Action: [kinesis:DescribeStreamSummary, kinesis:ListShards]
+                Resource: !GetAtt EventsStream.Arn
+              - Effect: Allow
+                Action: [sqs:GetQueueAttributes]
+                Resource: [!GetAtt AlertsQueue.Arn, !GetAtt CartsQueue.Arn, !GetAtt AlertsDlq.Arn, !GetAtt CartsDlq.Arn]
+              - Effect: Allow
+                Action: [sns:Publish]
+                Resource: !Ref AlertsTopic
+  AirflowProfile:
+    Type: AWS::IAM::InstanceProfile
+    Condition: Airflow
+    Properties:
+      Roles: [!Ref AirflowRole]
+  AirflowSg:
+    Type: AWS::EC2::SecurityGroup
+    Condition: Airflow
+    Properties:
+      GroupDescription: Airflow via SSM only; no inbound ports
+      VpcId: !Ref AirflowVpcId
+      SecurityGroupEgress:
+        - {IpProtocol: '-1', CidrIp: 0.0.0.0/0}
+  AirflowInstance:
+    Type: AWS::EC2::Instance
+    Condition: Airflow
+    Properties:
+      ImageId: '{{resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64}}'
+      InstanceType: t3.medium
+      IamInstanceProfile: !Ref AirflowProfile
+      SubnetId: !Ref AirflowSubnetId
+      SecurityGroupIds: [!Ref AirflowSg]
+      MetadataOptions: {HttpTokens: required, HttpEndpoint: enabled}
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs: {VolumeSize: 20, VolumeType: gp3, Encrypted: true}
+      Tags:
+        - {Key: Name, Value: !Sub '${Prefix}-airflow'}
+        - {Key: Project, Value: TiendaCol}
+        - {Key: Owner, Value: DanielArcila}
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euxo pipefail
+          dnf install -y docker unzip awscli
+          systemctl enable --now docker
+          mkdir -p /opt/tiendacol/dags /opt/tiendacol/logs
+          aws s3 cp s3://${OpsBucket}/airflow/dags.zip /opt/tiendacol/dags.zip --region ${AWS::Region}
+          unzip -o /opt/tiendacol/dags.zip -d /opt/tiendacol/dags
+          mkdir -p /opt/tiendacol/data
+          chown -R 50000:0 /opt/tiendacol/logs /opt/tiendacol/data
+          docker run -d --name tiendacol-airflow --restart unless-stopped --network host \
+            -e AIRFLOW__CORE__EXECUTOR=SequentialExecutor \
+            -e AIRFLOW__CORE__LOAD_EXAMPLES=False \
+            -e AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=False \
+            -e AIRFLOW__WEBSERVER__WEB_SERVER_HOST=127.0.0.1 \
+            -e AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/data/airflow.db \
+            -e _PIP_ADDITIONAL_REQUIREMENTS=boto3 \
+            -e AWS_DEFAULT_REGION=${AWS::Region} \
+            -e LAKE_BUCKET=${LakeBucket} \
+            -e OPS_BUCKET=${OpsBucket} \
+            -e STREAM_NAME=${EventsStream} \
+            -e GLUE_STREAMING_JOB=${StreamingJob} \
+            -e GLUE_GOLD_JOB=${GoldJob} \
+            -e ALERTS_TOPIC_ARN=${AlertsTopic} \
+            -e ATHENA_WORKGROUP=${AthenaWorkGroup} \
+            -v /opt/tiendacol/dags:/opt/airflow/dags:ro \
+            -v /opt/tiendacol/logs:/opt/airflow/logs \
+            -v /opt/tiendacol/data:/opt/airflow/data \
+            apache/airflow:2.10.5-python3.11 standalone
+Outputs:
+  LakeBucket: {Value: !Ref LakeBucket}
+  OpsBucket: {Value: !Ref OpsBucket}
+  StreamName: {Value: !Ref EventsStream}
+  AlertsQueueUrl: {Value: !Ref AlertsQueue}
+  CartsQueueUrl: {Value: !Ref CartsQueue}
+  AlertsDlqUrl: {Value: !Ref AlertsDlq}
+  CartsDlqUrl: {Value: !Ref CartsDlq}
+  CartsTable: {Value: !Ref CartsTable}
+  AlertsTopicArn: {Value: !Ref AlertsTopic}
+  StreamingJob: {Value: !Ref StreamingJob}
+  GoldJob: {Value: !Ref GoldJob}
+  AthenaWorkGroup: {Value: !Ref AthenaWorkGroup}
+  AirflowInstanceId:
+    Condition: Airflow
+    Value: !Ref AirflowInstance

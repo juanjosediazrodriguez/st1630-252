@@ -160,7 +160,7 @@ def build_fact_sales_df(
                 "department": dept,
                 "datetime_key": dt_key,
                 "date": order_date,
-                "event_ts": pd.to_datetime(ts_str, utc=True),
+                "event_ts": pd.to_datetime(ts_str, utc=True).to_pydatetime(),
                 "event_date": ev_date,
                 "payment_method": pay_method,
                 "order_status": status,
@@ -293,7 +293,7 @@ def build_fact_funnel_df(
                 "department": dept,
                 "datetime_key": dt_key,
                 "hour": hour_bucket,
-                "event_ts": pd.to_datetime(ts_str, utc=True),
+                "event_ts": pd.to_datetime(ts_str, utc=True).to_pydatetime(),
                 "event_date": ev_date,
                 "order_id": oid_str,
             })
