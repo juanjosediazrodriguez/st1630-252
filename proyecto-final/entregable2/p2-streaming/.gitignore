@@ -1,0 +1,5 @@
+_local/
+__pycache__/
+.pytest_cache/
+*.zip
+build/
